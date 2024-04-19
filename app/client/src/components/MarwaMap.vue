@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { h, onMounted, ref } from 'vue';
+import { h, onMounted, ref, watch } from 'vue';
 import { arcgisRequestParams, arcgisUrl, contextMenu, olMapData } from '@/module/map/map.data'
-import { NForm, NFormItem, NButton, NCheckbox, NIcon, NFlex, NSelect, useModal } from 'naive-ui'
+import { NForm, NFormItem, NButton, NCheckbox, NIcon, NCode, NFlex, NSelect, useModal, NModal, NCard } from 'naive-ui'
 import type { Feature } from 'ol';
 import type { Geometry } from 'ol/geom';
+import type Map from "ol/Map";
 import { GeoJSON } from 'ol/format';
-import { exportMetaFeaturesJSON, featureCollection, featuresStyles } from '@/module/feature/feature.collection';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
+import { featureCollection, featuresJSON, featuresStyles } from '@/module/feature/feature.collection';
+import { addInteraction, customDraw } from '@/module/draw/draw';
 
 const modal = useModal()
 
@@ -31,26 +31,26 @@ const styleFunction = (feature) => {
   return featuresStyles[feature.getGeometry().getType()];
 };
 
-const vectorSource = new VectorSource({
-  features: new GeoJSON().readFeatures(featureCollection(features.value)),
-});
-
-const vectorLayer = new VectorLayer({
-  source: vectorSource,
-  style: styleFunction,
-})
-
 const editorPanel = ref({
   enabled: true,
   drawType: 'Point'
 })
 
+const showMetaModal = ref(false)
+
+const mapRef = ref();
+const drawRef = ref();
 const layers = ref(null)
 const layersOptions = []
 
 const jawgLayer = ref(null);
 const arcgisLayer = ref(null);
 const layerList = ref([]);
+
+const vectorSource = ref()
+const vectorLayer = ref()
+
+const draw = ref()
 
 function centerChanged(event) {
   currentCenter.value = event.target.getCenter();
@@ -65,6 +65,7 @@ const drawstart = (event) => {
 };
 
 const drawend = (event) => {
+  zones.value.push(event.feature);
   console.log(event);
 };
 
@@ -72,22 +73,29 @@ const log = (eventType: string, event: unknown) => {
   console.log(eventType, event);
 };
 
-
-
-const showMetaModal = () => {
-  const json = exportMetaFeaturesJSON(vectorLayer)
-  console.log(zones.value);
-  // modal.create({
-  //   title: 'Карта сайта',
-  //   content: () => h('pre', { class: 'col' }, JSON.stringify(zones.value, null, 2)),
-  //   preset: 'dialog',
-  //   class: 'insane-modal',
-  // })
+const undo = () => {
+  draw.value.removeLastPoint();
+  console.log(draw.value);
 }
 
+watch(
+    () => editorPanel.value.drawType,
+    () => {
+      const map: Map = mapRef.value?.map;
+
+      map.removeInteraction(draw);
+      // addInteraction(draw, mapRef.value, editorPanel.value.drawType);
+    }
+)
+
 onMounted(() => {
+  const map: Map = mapRef.value?.map;
+
   layerList.value.push(jawgLayer.value.tileLayer);
   layerList.value.push(arcgisLayer.value.tileLayer);
+
+  draw.value = customDraw(map, editorPanel.value.drawType)
+  map.addInteraction(draw.value)
 });
 </script>
 
@@ -100,6 +108,10 @@ onMounted(() => {
         </n-flex>
 
         <n-flex>
+          <n-button @click="undo">
+            Вернуть
+          </n-button>
+
           <n-button :type="editorPanel.drawType === 'Point' ? 'success' : 'default'"
                     @click="editorPanel.drawType = 'Point'"
           >
@@ -111,8 +123,8 @@ onMounted(() => {
             Область
           </n-button>
 
-          <n-button :type="editorPanel.drawType === 'Polygon' ? 'success' : 'default'"
-                    @click="editorPanel.drawType = 'Polygon'">
+          <n-button :type="editorPanel.drawType === 'Box' ? 'success' : 'default'"
+                    @click="editorPanel.drawType = 'Box'">
             Палатка
           </n-button>
 
@@ -120,9 +132,42 @@ onMounted(() => {
             Измеритель
           </n-button>
 
-          <n-button @click="showMetaModal">
+          <n-button @click="showMetaModal = true">
             Мета данные
           </n-button>
+
+          <n-modal v-model:show="showMetaModal">
+            <n-card
+                style="width: 600px"
+                title="Modal"
+                :bordered="false"
+                size="huge"
+                role="dialog"
+                aria-modal="true"
+            >
+              <template #header-extra>
+                Oops!
+              </template>
+
+              <n-flex vertical>
+                <n-button>
+                  Скопировать код
+                </n-button>
+
+                <div style="overflow: auto">
+                  <n-code v-if="zones" :code="featuresJSON(zones)"
+                          language="json"
+                          :word-wrap="true"
+                          show-line-numbers
+                  />
+                </div>
+              </n-flex>
+
+              <template #footer>
+                Footer
+              </template>
+            </n-card>
+          </n-modal>
         </n-flex>
       </n-flex>
       <n-select v-model:value="layers" :options="layersOptions" size="large" placeholder="Выберите слой" />
@@ -130,6 +175,7 @@ onMounted(() => {
   </n-form>
 
   <ol-map
+      ref="mapRef"
       :loadTilesWhileAnimating="true"
       :loadTilesWhileInteracting="true"
       style="height: 700px"
@@ -184,9 +230,10 @@ onMounted(() => {
         @scaleend="log('scaleend', $event)"
     />
 
-    <ol-vector-layer>
-      <ol-source-vector :projection="projection">
+    <ol-vector-layer ref="vectorLayer">
+      <ol-source-vector ref="vectorSource" :projection="projection" :features="zones" :format="geo">
         <ol-interaction-draw
+            ref="drawRef"
             v-if="editorPanel.enabled"
             :type="editorPanel.drawType"
             @drawend="drawend"

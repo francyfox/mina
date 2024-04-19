@@ -15,10 +15,8 @@ export const featureCollection = (features: FeatureItem[]) => {
   }
 }
 
-export const exportMetaFeaturesJSON = (vectorLayer: any) => {
-  const json = new GeoJSON().readFeatures(vectorLayer.getSource().getFeatures())
-
-  return json
+export const featuresJSON = (features) => {
+  return new GeoJSON().writeFeatures(features)
 }
 
 export const featuresStyles = {

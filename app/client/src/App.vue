@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import MarwaMap from '@/components/MarwaMap.vue';
-import { NModalProvider } from 'naive-ui'
+import { NModalProvider, NConfigProvider } from 'naive-ui'
+import hljs from 'highlight.js/lib/core'
+import json from 'highlight.js/lib/languages/json'
+
+hljs.registerLanguage('json', json)
 </script>
 
 <template>
-  <n-modal-provider>
-    <div class="marwa">
-      <h1 class="marwa-title">
-        Marwa map
-      </h1>
+  <n-config-provider :hljs="hljs">
+    <n-modal-provider>
+      <div class="marwa">
+        <h1 class="marwa-title">
+          Marwa map
+        </h1>
 
-      <div class="marwa-body">
-        <marwa-map />
+        <div class="marwa-body">
+          <marwa-map />
+        </div>
       </div>
-    </div>
-  </n-modal-provider>
+    </n-modal-provider>
+  </n-config-provider>
 </template>
