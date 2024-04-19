@@ -7,7 +7,7 @@ import type { Geometry } from 'ol/geom';
 import type Map from "ol/Map";
 import { GeoJSON } from 'ol/format';
 import { featureCollection, featuresJSON, featuresStyles } from '@/module/feature/feature.collection';
-import { addInteraction, customDraw } from '@/module/draw/draw';
+import { customDraw } from '@/module/draw/draw';
 
 const modal = useModal()
 
@@ -74,8 +74,10 @@ const log = (eventType: string, event: unknown) => {
 };
 
 const undo = () => {
-  draw.value.removeLastPoint();
-  console.log(draw.value);
+  drawRef.value.draw.removeLastPoint();
+  drawRef.value.draw.finishDrawing();
+
+  console.log(drawRef.value.draw);
 }
 
 watch(
