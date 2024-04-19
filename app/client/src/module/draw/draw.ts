@@ -2,7 +2,7 @@ import { createBox, createRegularPolygon } from 'ol/interaction/Draw';
 import { Polygon } from 'ol/geom';
 import { Draw } from 'ol/interaction';
 import VectorSource from 'ol/source/Vector';
-export function customDraw(map: any, drawType: string) {
+export function customDraw(drawType: string) {
   const source = new VectorSource({wrapX: false});
 
   let value = drawType;
