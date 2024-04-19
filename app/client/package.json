@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@turf/buffer": "^6.5.0",
+    "@turf/helpers": "^6.5.0",
     "ol": "^9.1.0",
     "ol-contextmenu": "^5.4.0",
     "ol-ext": "^4.0.18",
@@ -17,6 +19,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.4",
+    "naive-ui": "^2.38.1",
     "sass": "^1.75.0",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
