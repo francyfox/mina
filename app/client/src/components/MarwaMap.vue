@@ -5,7 +5,9 @@ import { NForm, NFormItem, NButton, NCheckbox, NIcon, NFlex, NSelect, useModal }
 import type { Feature } from 'ol';
 import type { Geometry } from 'ol/geom';
 import { GeoJSON } from 'ol/format';
-import { featureCollection } from '@/module/feature/feature.collection';
+import { exportMetaFeaturesJSON, featureCollection, featuresStyles } from '@/module/feature/feature.collection';
+import VectorLayer from 'ol/layer/Vector';
+import VectorSource from 'ol/source/Vector';
 
 const modal = useModal()
 
@@ -24,6 +26,19 @@ const features = ref([])
 
 const geo = new GeoJSON()
 zones.value = geo.readFeatures(featureCollection(features.value));
+
+const styleFunction = (feature) => {
+  return featuresStyles[feature.getGeometry().getType()];
+};
+
+const vectorSource = new VectorSource({
+  features: new GeoJSON().readFeatures(featureCollection(features.value)),
+});
+
+const vectorLayer = new VectorLayer({
+  source: vectorSource,
+  style: styleFunction,
+})
 
 const editorPanel = ref({
   enabled: true,
@@ -57,13 +72,17 @@ const log = (eventType: string, event: unknown) => {
   console.log(eventType, event);
 };
 
+
+
 const showMetaModal = () => {
-  modal.create({
-    title: 'Карта сайта',
-    content: () => h('pre', { class: 'col' }, JSON.stringify(zones.value, null, 2)),
-    preset: 'dialog',
-    class: 'insane-modal',
-  })
+  const json = exportMetaFeaturesJSON(vectorLayer)
+  console.log(zones.value);
+  // modal.create({
+  //   title: 'Карта сайта',
+  //   content: () => h('pre', { class: 'col' }, JSON.stringify(zones.value, null, 2)),
+  //   preset: 'dialog',
+  //   class: 'insane-modal',
+  // })
 }
 
 onMounted(() => {
