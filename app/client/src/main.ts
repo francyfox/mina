@@ -6,6 +6,7 @@ import OpenLayersMap, {
   type Vue3OpenlayersGlobalOptions
 } from 'vue3-openlayers';
 import NaiveUI from 'naive-ui'
+import 'ol-ext/dist/ol-ext.css'
 
 const options: Vue3OpenlayersGlobalOptions = {
   debug: true,

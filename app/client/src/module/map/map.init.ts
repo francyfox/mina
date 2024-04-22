@@ -6,10 +6,13 @@ import VectorLayer from 'ol/layer/Vector';
 import {
   Select,
   Translate,
-  defaults as defaultInteractions,
+  defaults as defaultInteractions, DragRotateAndZoom
 } from 'ol/interaction';
 import Map from 'ol/Map';
 import { olMapData } from '@/module/map/map.data';
+import CopyPaste from 'ol-ext/interaction/CopyPaste';
+import Tranform from 'ol-ext/interaction/Transform'
+
 
 export const initMap = () => {
   const raster = new TileLayer({
@@ -21,14 +24,23 @@ export const initMap = () => {
     source: source,
   });
 
+  const transform = new Tranform()
+
+  const copyPaste = new CopyPaste({
+    destination: vector.getSource(),
+    features: transform.getFeatures()
+  });
+
   const select = new Select();
 
   const translate = new Translate({
     features: select.getFeatures(),
   });
 
+  const dragRotateZoom =  new DragRotateAndZoom()
+
   const map = new Map({
-    interactions: defaultInteractions().extend([select, translate]),
+    interactions: defaultInteractions().extend([select, translate, dragRotateZoom, copyPaste]),
     layers: [raster, vector],
     target: 'map',
     view: new View(olMapData),

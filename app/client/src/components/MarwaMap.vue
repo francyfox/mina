@@ -1,23 +1,38 @@
 <script setup lang="ts">
 import { onMounted, ref, unref, watch } from 'vue';
 import { initMap } from '@/module/map/map.init';
-import { customDraw } from '@/module/draw/draw';
+import { customDraw, drawTypes } from '@/module/draw/draw';
+import MetaModal from '@/components/MetaModal.vue';
+import MapElementModal from '@/components/MapElementModal.vue';
 
 const drawType = ref('Polygon')
 const drawRef = ref()
+const layer = ref()
+const layersOptions = ref()
+
+const showMetaModal = ref(false)
+const showMapElementModal = ref(false)
 
 const undo = () => {
   drawRef.value.removeLastPoint();
 }
+
 onMounted(() => {
   const { map, vector, source } = initMap()
 
   customDraw(map, source, drawType.value)
 
+  window.draw.addEventListener('drawend', () => {
+    showMapElementModal.value = true
+  })
 
   watch(() => drawType.value, () => {
     map.removeInteraction(window.draw);
     customDraw(map, source, drawType.value)
+
+    window.draw.addEventListener('drawend', () => {
+      showMapElementModal.value = true
+    })
   })
 })
 </script>
@@ -37,14 +52,22 @@ onMounted(() => {
               Вернуть
             </n-button>
 
-            <n-button :type="drawType === 'None' ? 'success' : 'default'"
-                      @click="drawType = 'None'"
+            <n-button :type="drawType === drawTypes.none ? 'success' : 'default'"
+                      @click="drawType = drawTypes.none"
             >
               Курсор
             </n-button>
 
-            <n-button>
-              Вращение
+            <n-button :type="drawType === drawTypes.polygon ? 'success' : 'default'"
+                      @click="drawType = drawTypes.polygon"
+            >
+              Прямые
+            </n-button>
+
+            <n-button :type="drawType === drawTypes.box ? 'success' : 'default'"
+                      @click="drawType = drawTypes.box"
+            >
+              Прямоугольник
             </n-button>
 
             <n-button>
@@ -59,58 +82,37 @@ onMounted(() => {
               Перемещение краев
             </n-button>
 
+          </n-flex>
+          <n-flex>
 
+          </n-flex>
+          <n-flex>
+            <n-select v-model:value="layer" :options="layersOptions" size="large" placeholder="Выберите слой" style="width: 150px" />
 
-            <n-button :type="drawType === 'Polygon' ? 'success' : 'default'"
-                      @click="drawType = 'Polygon'">
-              Прямые
+            <n-button>
+              Создать слой
             </n-button>
 
-            <n-button :type="drawType === 'Box' ? 'success' : 'default'"
-                      @click="drawType = 'Box'">
-              Прямоугольник
+
+            <n-button @click="showMetaModal">
+              Мета данные
             </n-button>
 
-<!--            <n-button @click="showMetaModal = true">-->
-<!--              Мета данные-->
-<!--            </n-button>-->
+            <n-modal v-model:show="showMetaModal">
+              <meta-modal code="" />
+            </n-modal>
 
-<!--            <n-modal v-model:show="showMetaModal">-->
-<!--              <n-card-->
-<!--                  style="width: 600px"-->
-<!--                  title="Modal"-->
-<!--                  :bordered="false"-->
-<!--                  size="huge"-->
-<!--                  role="dialog"-->
-<!--                  aria-modal="true"-->
-<!--              >-->
-<!--                <template #header-extra>-->
-<!--                  Oops!-->
-<!--                </template>-->
-
-<!--                <n-flex vertical>-->
-<!--                  <n-button>-->
-<!--                    Скопировать код-->
-<!--                  </n-button>-->
-
-<!--                  <div style="overflow: auto">-->
-<!--                    <n-code v-if="zones" :code="featuresJSON(zones)"-->
-<!--                            language="json"-->
-<!--                            :word-wrap="true"-->
-<!--                            show-line-numbers-->
-<!--                    />-->
-<!--                  </div>-->
-<!--                </n-flex>-->
-
-<!--                <template #footer>-->
-<!--                  Footer-->
-<!--                </template>-->
-<!--              </n-card>-->
-<!--            </n-modal>-->
+            <n-button>
+              Сохранить
+            </n-button>
           </n-flex>
         </n-flex>
-<!--        <n-select v-model:value="layers" :options="layersOptions" size="large" placeholder="Выберите слой" />-->
+
       </n-flex>
+
+      <n-modal v-model:show="showMapElementModal">
+        <map-element-modal />
+      </n-modal>
     </n-form>
   </div>
   <div id="map" class="map"></div>
