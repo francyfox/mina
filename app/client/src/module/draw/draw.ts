@@ -1,9 +1,7 @@
 import { createBox, createRegularPolygon } from 'ol/interaction/Draw';
 import { Polygon } from 'ol/geom';
 import { Draw } from 'ol/interaction';
-import VectorSource from 'ol/source/Vector';
-export function customDraw(drawType: string) {
-  const source = new VectorSource({wrapX: false});
+export function customDraw(map: any, source: any, drawType: string) {
 
   let value = drawType;
   if (value !== 'None') {
@@ -42,10 +40,12 @@ export function customDraw(drawType: string) {
       };
     }
 
-    return new Draw({
+    const draw = new Draw({
       source: source,
       type: value,
       geometryFunction: geometryFunction
     });
+
+    map.addInteraction(draw);
   }
 }
