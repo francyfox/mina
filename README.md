@@ -1,4 +1,5 @@
 # ТЗ Marwa Map
+[![Netlify Status](https://api.netlify.com/api/v1/badges/75104cb0-b0db-4395-9b47-691051db2064/deploy-status)](https://app.netlify.com/sites/test-marwa/deploys)
 
 Backend MIRO: https://miro.com/app/board/uXjVKRGW2EY=/?share_link_id=974427351414
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, unref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { initMap } from '@/module/map/map.init';
 import { customDraw, drawTypes } from '@/module/draw/draw';
 import MetaModal from '@/components/MetaModal.vue';
@@ -18,7 +18,7 @@ const undo = () => {
 }
 
 onMounted(() => {
-  const { map, vector, source } = initMap()
+  const { map, source } = initMap()
 
   customDraw(map, source, drawType.value)
 

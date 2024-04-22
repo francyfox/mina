@@ -4,8 +4,6 @@ import { OSM } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import {
-  Select,
-  Translate,
   defaults as defaultInteractions, DragRotateAndZoom
 } from 'ol/interaction';
 import Map from 'ol/Map';
@@ -26,18 +24,16 @@ export const initMap = () => {
 
   const transform = new Tranform()
 
-
-
   const copyPaste = new CopyPaste({
     destination: vector.getSource(),
     features: transform.getFeatures()
   });
 
-  const select = new Select();
+  // const select = new Select();
 
-  const translate = new Translate({
-    features: select.getFeatures(),
-  });
+  // const translate = new Translate({
+  //   features: select.getFeatures(),
+  // });
 
   const dragRotateZoom =  new DragRotateAndZoom()
 
