@@ -12,20 +12,13 @@ const undo = () => {
 onMounted(() => {
   const { map, vector, source } = initMap()
 
-  let draw = customDraw(source, drawType.value)
+  customDraw(map, source, drawType.value)
 
 
   watch(() => drawType.value, () => {
-    console.log(drawType.value)
-    map.removeInteraction(draw);
-
-    draw = customDraw(map, source, drawType.value)
-
+    map.removeInteraction(window.draw);
+    customDraw(map, source, drawType.value)
   })
-
-  draw = customDraw(source, drawType.value)
-  map.addInteraction(draw);
-  drawRef.value = draw
 })
 </script>
 
@@ -35,8 +28,13 @@ onMounted(() => {
       <n-flex>
         <n-flex vertical>
           <n-flex>
+            <span style="color: #000">{{ drawType }}</span>
             <n-button @click="undo">
-              Прервать
+              Назад
+            </n-button>
+
+            <n-button @click="undo">
+              Вернуть
             </n-button>
 
             <n-button :type="drawType === 'None' ? 'success' : 'default'"
@@ -45,29 +43,32 @@ onMounted(() => {
               Курсор
             </n-button>
 
-            <n-button :type="drawType === 'Point' ? 'success' : 'default'"
-                      @click="drawType = 'Point'"
-            >
-              Маркер
+            <n-button>
+              Вращение
             </n-button>
+
+            <n-button>
+              Вращение
+            </n-button>
+
+            <n-button>
+              Перемещение
+            </n-button>
+
+            <n-button>
+              Перемещение краев
+            </n-button>
+
+
 
             <n-button :type="drawType === 'Polygon' ? 'success' : 'default'"
                       @click="drawType = 'Polygon'">
-              Область
-            </n-button>
-
-            <n-button :type="drawType === 'Circle' ? 'success' : 'default'"
-                      @click="drawType = 'Circle'">
-              Круг
+              Прямые
             </n-button>
 
             <n-button :type="drawType === 'Box' ? 'success' : 'default'"
                       @click="drawType = 'Box'">
-              Палатка
-            </n-button>
-
-            <n-button>
-              Измеритель
+              Прямоугольник
             </n-button>
 
 <!--            <n-button @click="showMetaModal = true">-->

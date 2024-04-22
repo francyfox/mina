@@ -40,7 +40,7 @@ export function customDraw(map: any, source: any, drawType: string) {
       };
     }
 
-    const draw = new Draw({
+    window.draw = new Draw({
       source: source,
       type: value,
       geometryFunction: geometryFunction
