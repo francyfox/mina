@@ -26,6 +26,8 @@ export const initMap = () => {
 
   const transform = new Tranform()
 
+
+
   const copyPaste = new CopyPaste({
     destination: vector.getSource(),
     features: transform.getFeatures()
@@ -40,7 +42,7 @@ export const initMap = () => {
   const dragRotateZoom =  new DragRotateAndZoom()
 
   const map = new Map({
-    interactions: defaultInteractions().extend([select, translate, dragRotateZoom, copyPaste]),
+    interactions: defaultInteractions().extend([transform, copyPaste, dragRotateZoom, copyPaste]),
     layers: [raster, vector],
     target: 'map',
     view: new View(olMapData),
