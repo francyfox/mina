@@ -2,6 +2,9 @@ import Toggle from 'ol-ext/control/Toggle'
 import Button from 'ol-ext/control/Button'
 import Select from 'ol/interaction/Select'
 import Polygon from 'ol/geom/Polygon'
+import { Draw } from 'ol/interaction'
+import DrawRegular from 'ol-ext/interaction/DrawRegular'
+import { createBox } from 'ol/interaction/Draw'
 
 
 export class ControlBarButtons {
@@ -62,23 +65,29 @@ export class ControlBarButtons {
     const lineButton = new Toggle({
       html: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24"><g fill="none"><path d="M17 3.002a2.998 2.998 0 1 1-2.148 5.09l-5.457 3.12a3.002 3.002 0 0 1 0 1.577l5.458 3.119a2.998 2.998 0 1 1-.746 1.304l-5.457-3.12a2.998 2.998 0 1 1 0-4.184l5.457-3.12A3 3 0 0 1 17 3.003z" fill="currentColor"></path></g></svg>',
       className: 'bar-button line',
-      source: this.vector.getSource(),
       title: 'Линия',
-      interaction: new Select(),
+      interaction: new Draw({
+        type: 'Polygon',
+        source: this.vector.getSource(),
+        geometryFunction: function(coordinates, geometry) {
+          this.nbpts = coordinates[0].length;
+          if (geometry) geometry.setCoordinates([coordinates[0].concat([coordinates[0][0]])]);
+          else geometry = new Polygon(coordinates);
+          return geometry;
+        }
+      }),
       active: false,
-      geometryFunction: function(coordinates, geometry) {
-        this.nbpts = coordinates[0].length;
-        if (geometry) geometry.setCoordinates([coordinates[0].concat([coordinates[0][0]])]);
-        else geometry = new Polygon(coordinates);
-        return geometry;
-      }
     })
 
     const boxButton = new Toggle({
       html: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16"><g fill="none"><path d="M13.798 2.217l-.015-.004l-.765-.248a1.578 1.578 0 0 1-1-.999L11.77.202a.302.302 0 0 0-.57 0l-.25.764a1.576 1.576 0 0 1-.983.999l-.765.248a.302.302 0 0 0 0 .57l.765.249a1.582 1.582 0 0 1 1 1.002l.248.764A.302.302 0 0 0 11.5 5h.004a.302.302 0 0 0 .281-.202l.249-.764a1.576 1.576 0 0 1 .999-.999l.765-.248a.303.303 0 0 0 0-.57zm1.416 3.355l.612.199l.013.003a.242.242 0 0 1 0 .455l-.613.2a1.262 1.262 0 0 0-.799.798l-.199.612a.241.241 0 0 1-.456 0l-.2-.612a1.261 1.261 0 0 0-.798-.802l-.613-.199a.242.242 0 0 1 0-.455l.613-.2a1.261 1.261 0 0 0 .787-.798l.199-.612a.242.242 0 0 1 .456 0l.199.612a1.26 1.26 0 0 0 .799.799zM8 2.5c0-.173.035-.343.1-.5h-.85a.75.75 0 0 0 0 1.5h1.22a1.31 1.31 0 0 1-.47-1zM4.75 2a.75.75 0 0 1 0 1.5c-.69 0-1.25.56-1.25 1.25a.75.75 0 0 1-1.5 0A2.75 2.75 0 0 1 4.75 2zm8.5 8.5a.75.75 0 0 1 .75.75A2.75 2.75 0 0 1 11.25 14a.75.75 0 0 1 0-1.5c.69 0 1.25-.56 1.25-1.25a.75.75 0 0 1 .75-.75zM6.5 13.25a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75zm-1.75-.75a.75.75 0 0 1 0 1.5A2.75 2.75 0 0 1 2 11.25a.75.75 0 0 1 1.5 0c0 .69.56 1.25 1.25 1.25zm-2-3a.75.75 0 0 0 .75-.75v-1.5a.75.75 0 0 0-1.5 0v1.5c0 .414.336.75.75.75z" fill="currentColor"></path></g></svg>',
       className: 'bar-button box',
       title: 'Квадрат',
-      interaction: new Select(),
+      interaction: new DrawRegular({
+        source: this.vector.getSource(),
+        sides: 4,
+        canRotate: true
+      }),
       active: false,
     })
 

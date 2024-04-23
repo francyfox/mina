@@ -19,103 +19,10 @@ const undo = () => {
 
 onMounted(() => {
   const { map, source } = initMap()
-
-  // customDraw(map, source, drawType.value)
-
-  // window.draw.addEventListener('drawend', () => {
-  //   showMapElementModal.value = true
-  // })
-
-  // watch(() => drawType.value, () => {
-  //   map.removeInteraction(window.draw);
-  //   customDraw(map, source, drawType.value)
-  //
-  //   window.draw.addEventListener('drawend', (event) => {
-  //     showMapElementModal.value = true
-  //     console.log(event)
-  //   })
-  // })
 })
 </script>
 
 <template>
-  <div class="editor">
-    <n-form size="large" class="editor">
-      <n-flex>
-        <n-flex vertical>
-          <n-flex>
-            <span style="color: #000">{{ drawType }}</span>
-            <n-button @click="undo">
-              Назад
-            </n-button>
-
-            <n-button @click="undo">
-              Вернуть
-            </n-button>
-
-            <n-button :type="drawType === drawTypes.none ? 'success' : 'default'"
-                      @click="drawType = drawTypes.none"
-            >
-              Курсор
-            </n-button>
-
-            <n-button :type="drawType === drawTypes.polygon ? 'success' : 'default'"
-                      @click="drawType = drawTypes.polygon"
-            >
-              Прямые
-            </n-button>
-
-            <n-button :type="drawType === drawTypes.box ? 'success' : 'default'"
-                      @click="drawType = drawTypes.box"
-            >
-              Прямоугольник
-            </n-button>
-
-            <n-button>
-              Вращение
-            </n-button>
-
-            <n-button>
-              Перемещение
-            </n-button>
-
-            <n-button>
-              Перемещение краев
-            </n-button>
-
-          </n-flex>
-          <n-flex>
-
-          </n-flex>
-          <n-flex>
-            <n-select v-model:value="layer" :options="layersOptions" size="large" placeholder="Выберите слой" style="width: 150px" />
-
-            <n-button>
-              Создать слой
-            </n-button>
-
-
-            <n-button @click="showMetaModal">
-              Мета данные
-            </n-button>
-
-            <n-modal v-model:show="showMetaModal">
-              <meta-modal code="" />
-            </n-modal>
-
-            <n-button>
-              Сохранить
-            </n-button>
-          </n-flex>
-        </n-flex>
-
-      </n-flex>
-
-      <n-modal v-model:show="showMapElementModal">
-        <map-element-modal />
-      </n-modal>
-    </n-form>
-  </div>
   <div id="map" class="map"></div>
 </template>
 
@@ -136,7 +43,7 @@ onMounted(() => {
 
 .map {
   width: 100%;
-  height: 600px
+  height: 600px;
 }
 
 .ol-control.ol-bar:not(.ol-group) {

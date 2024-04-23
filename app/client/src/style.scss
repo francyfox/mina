@@ -66,14 +66,13 @@ body {
 #app {
   padding: 0;
   width: 100%;
+  height: 100%;
 }
 
 .marwa {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  width: 100%;
-  max-width: 1680px;
 
   &-title {
     margin-top: 0;

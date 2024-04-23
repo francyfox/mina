@@ -11,10 +11,6 @@ hljs.registerLanguage('json', json)
   <n-config-provider :hljs="hljs">
     <n-modal-provider>
       <div class="marwa">
-        <h1 class="marwa-title">
-          Marwa map
-        </h1>
-
         <div class="marwa-body">
           <marwa-map />
         </div>
