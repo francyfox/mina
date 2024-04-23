@@ -1,22 +1,15 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import { initMap } from '@/module/map/map.init';
-import { customDraw, drawTypes } from '@/module/draw/draw';
 import MetaModal from '@/components/MetaModal.vue';
 import MapElementModal from '@/components/MapElementModal.vue';
 import MapHistory from '@/components/MapHistory.vue'
+import { useModalStore } from '@/store/modal.js'
+import { storeToRefs } from 'pinia'
 
-const drawType = ref('Polygon')
-const drawRef = ref()
-const layer = ref()
-const layersOptions = ref()
-
-const showMetaModal = ref(false)
-const showMapElementModal = ref(false)
-
-const undo = () => {
-  drawRef.value.removeLastPoint();
-}
+const mapRef = ref()
+const modalStore = useModalStore()
+const { showMetaModal, showMapElementModal } = storeToRefs(modalStore)
 
 onMounted(() => {
   const { map, source } = initMap()
@@ -24,8 +17,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="map" class="map">
+  <div ref="mapRef" id="map" class="map">
     <map-history :data="['test']" />
+
+    <n-modal v-model:show="showMetaModal">
+      <meta-modal code="ss" />
+    </n-modal>
   </div>
 </template>
 

@@ -5,6 +5,8 @@ import Polygon from 'ol/geom/Polygon'
 import { Draw } from 'ol/interaction'
 import DrawRegular from 'ol-ext/interaction/DrawRegular'
 import Tranform from 'ol-ext/interaction/Transform'
+import { useModalStore } from '@/store/modal.js'
+import { storeToRefs } from 'pinia'
 
 
 export class ControlBarButtons {
@@ -30,6 +32,13 @@ export class ControlBarButtons {
       title: 'Метаданные',
       interaction: new Select(),
       active: false,
+      handleClick: () => {
+        const modalStore = useModalStore()
+        const { showMetaModal, showMapElementModal } = storeToRefs(modalStore)
+
+        console.log(showMetaModal.value)
+        showMetaModal.value =!showMetaModal.value
+      }
     })
 
     const saveButton = new Button({
