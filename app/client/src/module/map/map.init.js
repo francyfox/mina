@@ -8,9 +8,8 @@ import {
 } from 'ol/interaction';
 import Map from 'ol/Map';
 import { olMapData } from '@/module/map/map.data';
-import CopyPaste from 'ol-ext/interaction/CopyPaste';
-import Tranform from 'ol-ext/interaction/Transform'
 import { controlBar } from '@/module/control-bar/control-bar.js'
+import CopyPaste from 'ol-ext/interaction/CopyPaste';
 
 
 export const initMap = () => {
@@ -23,12 +22,6 @@ export const initMap = () => {
     source: source,
   });
 
-  const transform = new Tranform()
-
-  const copyPaste = new CopyPaste({
-    destination: vector.getSource(),
-    features: transform.getFeatures()
-  });
 
   // const select = new Select();
 
@@ -36,11 +29,13 @@ export const initMap = () => {
   //   features: select.getFeatures(),
   // });
 
+  // TODO: copyPaste not working
+  const copyPaste = new CopyPaste()
   const dragRotateZoom =  new DragRotateAndZoom()
   const bar = controlBar(vector)
 
   const map = new Map({
-    interactions: defaultInteractions().extend([]),
+    interactions: defaultInteractions().extend([copyPaste, dragRotateZoom]),
     layers: [raster, vector],
     target: 'map',
     view: new View(olMapData),

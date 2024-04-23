@@ -4,6 +4,7 @@ import { initMap } from '@/module/map/map.init';
 import { customDraw, drawTypes } from '@/module/draw/draw';
 import MetaModal from '@/components/MetaModal.vue';
 import MapElementModal from '@/components/MapElementModal.vue';
+import MapHistory from '@/components/MapHistory.vue'
 
 const drawType = ref('Polygon')
 const drawRef = ref()
@@ -23,7 +24,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div id="map" class="map"></div>
+  <div id="map" class="map">
+    <map-history :data="['test']" />
+  </div>
 </template>
 
 <style lang="scss">
@@ -42,6 +45,7 @@ onMounted(() => {
 }
 
 .map {
+  position: relative;
   width: 100%;
   height: 600px;
 }
