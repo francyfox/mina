@@ -7,12 +7,7 @@ export const drawTypes = {
   box: 'Box',
 }
 
-declare global {
-  interface Window { draw: any; }
-}
-
-
-export function customDraw(map: any, source: any, drawType: string) {
+export function customDraw(map, source, drawType) {
 
   let value = drawType;
   if (value !== 'None') {
@@ -25,7 +20,7 @@ export function customDraw(map: any, source: any, drawType: string) {
 
     window.draw = new Draw({
       source: source,
-      type: value as any,
+      type: value,
       geometryFunction: geometryFunction
     });
 

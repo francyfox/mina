@@ -21,11 +21,11 @@ export const arcgisRequestParams = {
   _ts: false,
 };
 
-export const contextMenu = (view: any) => [
+export const contextMenu = (view) => [
   {
     text: "Center map here",
     classname: "some-style-class", // add some CSS rules
-    callback: (val: any) => {
+    callback: (val) => {
       view.value.setCenter(val.coordinate);
     },
   },

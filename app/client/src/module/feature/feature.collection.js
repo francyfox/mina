@@ -1,8 +1,7 @@
-import { FeatureItem } from '@/module/feature/polygon/polygon.tent';
 import { Fill, Stroke, Style } from 'ol/style.js';
 import { GeoJSON } from 'ol/format';
 
-export const featureCollection = (features: FeatureItem[]) => {
+export const featureCollection = (features) => {
   return {
     type: "FeatureCollection",
     crs: {

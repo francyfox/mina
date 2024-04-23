@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { onMounted, ref, watch } from 'vue';
 import { initMap } from '@/module/map/map.init';
 import { customDraw, drawTypes } from '@/module/draw/draw';
@@ -20,20 +20,21 @@ const undo = () => {
 onMounted(() => {
   const { map, source } = initMap()
 
-  customDraw(map, source, drawType.value)
+  // customDraw(map, source, drawType.value)
 
-  window.draw.addEventListener('drawend', () => {
-    showMapElementModal.value = true
-  })
+  // window.draw.addEventListener('drawend', () => {
+  //   showMapElementModal.value = true
+  // })
 
-  watch(() => drawType.value, () => {
-    map.removeInteraction(window.draw);
-    customDraw(map, source, drawType.value)
-
-    window.draw.addEventListener('drawend', () => {
-      showMapElementModal.value = true
-    })
-  })
+  // watch(() => drawType.value, () => {
+  //   map.removeInteraction(window.draw);
+  //   customDraw(map, source, drawType.value)
+  //
+  //   window.draw.addEventListener('drawend', (event) => {
+  //     showMapElementModal.value = true
+  //     console.log(event)
+  //   })
+  // })
 })
 </script>
 
@@ -136,5 +137,31 @@ onMounted(() => {
 .map {
   width: 100%;
   height: 600px
+}
+
+.ol-control.ol-bar:not(.ol-group) {
+  display: flex !important;
+  gap: 3em;
+}
+
+.bar {
+  &-button {
+    &.empty {
+      pointer-events: none !important;
+      opacity: 0;
+    }
+
+    button {
+      padding: 0.2em !important;
+      width: auto !important;
+      height: auto !important;
+      transition: background-color .1s ease-in-out;
+    }
+
+    svg {
+      width: 38px;
+      height: 38px;
+    }
+  }
 }
 </style>

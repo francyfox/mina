@@ -10,6 +10,7 @@ import Map from 'ol/Map';
 import { olMapData } from '@/module/map/map.data';
 import CopyPaste from 'ol-ext/interaction/CopyPaste';
 import Tranform from 'ol-ext/interaction/Transform'
+import { controlBar } from '@/module/control-bar/control-bar.js'
 
 
 export const initMap = () => {
@@ -36,12 +37,14 @@ export const initMap = () => {
   // });
 
   const dragRotateZoom =  new DragRotateAndZoom()
+  const bar = controlBar(vector)
 
   const map = new Map({
-    interactions: defaultInteractions().extend([transform, copyPaste, dragRotateZoom, copyPaste]),
+    interactions: defaultInteractions().extend([]),
     layers: [raster, vector],
     target: 'map',
     view: new View(olMapData),
+    controls: [ bar ]
   });
 
   return {
