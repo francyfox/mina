@@ -9,12 +9,14 @@ hljs.registerLanguage('json', json)
 
 <template>
   <n-config-provider :hljs="hljs">
-    <n-modal-provider>
-      <div class="marwa">
-        <div class="marwa-body">
-          <marwa-map />
+    <n-notification-provider>
+      <n-modal-provider>
+        <div class="marwa">
+          <div class="marwa-body">
+            <marwa-map />
+          </div>
         </div>
-      </div>
-    </n-modal-provider>
+      </n-modal-provider>
+    </n-notification-provider>
   </n-config-provider>
 </template>

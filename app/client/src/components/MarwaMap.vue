@@ -1,18 +1,32 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch, reactive } from 'vue';
 import { initMap } from '@/module/map/map.init';
 import MetaModal from '@/components/MetaModal.vue';
 import MapElementModal from '@/components/MapElementModal.vue';
 import MapHistory from '@/components/MapHistory.vue'
 import { useModalStore } from '@/store/modal.js'
 import { storeToRefs } from 'pinia'
+import { GeoJSON } from 'ol/format'
 
+const map = ref()
 const mapRef = ref()
+const featuresJSON = ref('')
 const modalStore = useModalStore()
 const { showMetaModal, showMapElementModal } = storeToRefs(modalStore)
 
+const importLayerJSON = (json) => {
+  console.log(json.features)
+
+  mapRef.value.innerHTML = ''
+  map.value = initMap(json.features)
+}
+
 onMounted(() => {
-  const { map, source } = initMap()
+  map.value = initMap()
+
+  watch(showMetaModal, () => {
+    featuresJSON.value = JSON.stringify(JSON.parse(new GeoJSON().writeFeatures(map.value.vector.getSource().getFeatures())), null, 2)
+  })
 })
 </script>
 
@@ -21,7 +35,9 @@ onMounted(() => {
     <map-history :data="['test']" />
 
     <n-modal v-model:show="showMetaModal">
-      <meta-modal code="ss" />
+      <meta-modal :code="featuresJSON"
+                  @import="importLayerJSON"
+      />
     </n-modal>
   </div>
 </template>

@@ -10,14 +10,20 @@ import Map from 'ol/Map';
 import { olMapData } from '@/module/map/map.data';
 import { controlBar } from '@/module/control-bar/control-bar.js'
 import CopyPaste from 'ol-ext/interaction/CopyPaste';
+import { GeoJSON } from 'ol/format'
+import { featureCollection } from '@/module/feature/feature.collection.js'
 
 
-export const initMap = () => {
+export const initMap = (features = []) => {
   const raster = new TileLayer({
     source: new OSM(),
   });
 
-  const source = new VectorSource({wrapX: false});
+  const source = new VectorSource({
+    wrapX: false,
+    features: new GeoJSON().readFeatures(featureCollection(features))
+  });
+
   const vector = new VectorLayer({
     source: source,
   });

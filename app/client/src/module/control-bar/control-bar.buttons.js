@@ -36,7 +36,6 @@ export class ControlBarButtons {
         const modalStore = useModalStore()
         const { showMetaModal, showMapElementModal } = storeToRefs(modalStore)
 
-        console.log(showMetaModal.value)
         showMetaModal.value =!showMetaModal.value
       }
     })
