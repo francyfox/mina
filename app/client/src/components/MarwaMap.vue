@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch, reactive } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { initMap } from '@/module/map/map.init';
 import MetaModal from '@/components/MetaModal.vue';
 import MapElementModal from '@/components/MapElementModal.vue';
@@ -7,22 +7,39 @@ import MapHistory from '@/components/MapHistory.vue'
 import { useModalStore } from '@/store/modal.js'
 import { storeToRefs } from 'pinia'
 import { GeoJSON } from 'ol/format'
+import { MapStorage } from '@/module/map-storage/map-storage.js'
+import { useNotification } from 'naive-ui'
+import EraseLayerModal from '@/components/EraseLayerModal.vue'
 
 const map = ref()
 const mapRef = ref()
 const featuresJSON = ref('')
+const currentLayer = ref('')
 const modalStore = useModalStore()
-const { showMetaModal, showMapElementModal } = storeToRefs(modalStore)
+const { showMetaModal, showMapElementModal, showEraseLayerModal } = storeToRefs(modalStore)
+const mapStorage = ref();
+
+const notification = useNotification();
+
+window.notification = notification;
 
 const importLayerJSON = (json) => {
-  console.log(json.features)
+  mapRef.value.innerHTML = '';
+  map.value = initMap(json.features);
+}
 
-  mapRef.value.innerHTML = ''
-  map.value = initMap(json.features)
+const eraseLayerData = () => {
+  mapStorage.value.setStore({});
+  showEraseLayerModal.value = false;
+  notification.success({
+    title: 'Данные удалены',
+    duration: 1000
+  });
 }
 
 onMounted(() => {
-  map.value = initMap()
+  mapStorage.value = new MapStorage();
+  map.value = initMap();
 
   watch(showMetaModal, () => {
     featuresJSON.value = JSON.stringify(JSON.parse(new GeoJSON().writeFeatures(map.value.vector.getSource().getFeatures())), null, 2)
@@ -38,6 +55,10 @@ onMounted(() => {
       <meta-modal :code="featuresJSON"
                   @import="importLayerJSON"
       />
+    </n-modal>
+
+    <n-modal v-model:show="showEraseLayerModal">
+      <erase-layer-modal @confirm="eraseLayerData" />
     </n-modal>
   </div>
 </template>

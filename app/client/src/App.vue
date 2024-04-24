@@ -9,7 +9,7 @@ hljs.registerLanguage('json', json)
 
 <template>
   <n-config-provider :hljs="hljs">
-    <n-notification-provider>
+    <n-notification-provider placement="bottom-right" :max="3" :scrollable="true">
       <n-modal-provider>
         <div class="marwa">
           <div class="marwa-body">

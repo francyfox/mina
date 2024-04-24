@@ -7,6 +7,7 @@ import DrawRegular from 'ol-ext/interaction/DrawRegular'
 import Tranform from 'ol-ext/interaction/Transform'
 import { useModalStore } from '@/store/modal.js'
 import { storeToRefs } from 'pinia'
+import { useNotification } from 'naive-ui'
 
 
 export class ControlBarButtons {
@@ -44,7 +45,25 @@ export class ControlBarButtons {
       html: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24"><g fill="none"><path d="M18.5 20a.5.5 0 0 1-.5.5h-5v1c0 .171-.017.338-.05.5H18a2 2 0 0 0 2-2V9.828a2 2 0 0 0-.586-1.414l-5.829-5.828a.491.491 0 0 0-.049-.04a.63.63 0 0 1-.036-.03a2.072 2.072 0 0 0-.219-.18a.652.652 0 0 0-.08-.044l-.048-.024l-.05-.029c-.054-.031-.109-.063-.166-.087a1.977 1.977 0 0 0-.624-.138c-.02-.001-.04-.004-.059-.007A.605.605 0 0 0 12.172 2H6a2 2 0 0 0-2 2v7h1.5V4a.5.5 0 0 1 .5-.5h6V8a2 2 0 0 0 2 2h4.5v10zm-5-15.379L17.378 8.5H14a.5.5 0 0 1-.5-.5V4.621zM5 12h3v2H5v-2zm-2.5 0H4v2.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5V12h.379a1.5 1.5 0 0 1 1.06.44l1.122 1.12A1.5 1.5 0 0 1 12 14.622V21.5a1.5 1.5 0 0 1-1.5 1.5H10v-5.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0-.5.5V23h-.5A1.5 1.5 0 0 1 1 21.5v-8A1.5 1.5 0 0 1 2.5 12zM9 18v5H4v-5h5z" fill="currentColor"></path></g></svg>',
       className: 'bar-button save',
       title: 'Сохранить',
-      interaction: new Select(),
+      handleClick: () => {
+        window.notification.success({
+          title: 'Сохранено',
+          duration: 1000
+        })
+      },
+      active: false,
+    })
+
+    const removeLayerData = new Button({
+      html: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16"><g fill="none"><path d="M10 4h3a.5.5 0 0 1 0 1h-.553l-.752 6.776A2.5 2.5 0 0 1 9.21 14H6.79a2.5 2.5 0 0 1-2.485-2.224L3.552 5H3a.5.5 0 0 1 0-1h3a2 2 0 1 1 4 0zM8 3a1 1 0 0 0-1 1h2a1 1 0 0 0-1-1zM6.5 7v4a.5.5 0 0 0 1 0V7a.5.5 0 0 0-1 0zM9 6.5a.5.5 0 0 0-.5.5v4a.5.5 0 0 0 1 0V7a.5.5 0 0 0-.5-.5z" fill="currentColor"></path></g></svg>',
+      className: 'bar-button remove-layer-data',
+      title: 'Удалить данные слоя',
+      handleClick: () => {
+        const modalStore = useModalStore()
+        const { showEraseLayerModal } = storeToRefs(modalStore)
+
+        showEraseLayerModal.value =!showEraseLayerModal.value
+      },
       active: false,
     })
 
@@ -52,6 +71,7 @@ export class ControlBarButtons {
       layerButton,
       metaButton,
       saveButton,
+      removeLayerData
     ]
   }
   actionsButtons() {
@@ -124,7 +144,6 @@ export class ControlBarButtons {
       boxButton,
     ]
   }
-
 }
 
 

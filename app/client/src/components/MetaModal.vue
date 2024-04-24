@@ -32,7 +32,8 @@ const importJSON = (data) => {
     } catch (e) {
       notification.error({
         title: 'Error',
-        message: 'Не удалось распарсить файл. Возможно в файле допущена синтаксическая ошибка'
+        message: 'Не удалось распарсить файл. Возможно в файле допущена синтаксическая ошибка',
+        duration: 1000
       })
     }
 
@@ -43,6 +44,7 @@ const copyJSON = (content) => {
   window.navigator.clipboard.writeText(content);
   notification.success({
     content: 'Скопировано!',
+    duration: 1000
   })
 }
 </script>

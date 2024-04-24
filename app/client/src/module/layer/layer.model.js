@@ -1,5 +1,4 @@
 import { nanoid } from 'nanoid'
-
 export class LayerModel {
   _id
   name = ''
@@ -13,11 +12,15 @@ export class LayerModel {
     this.mapElementCollection = []
   }
 
-  set id(value) {
-    this._id = value
-  }
-
   get id() {
     return this._id
+  }
+
+  updateFeatures() {
+
+  }
+
+  removeFeatures() {
+
   }
 }
