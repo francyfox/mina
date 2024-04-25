@@ -10,7 +10,5 @@ export const controlBar = (vector) => {
   const actions = new Bar({ toggleOne: true, group:true, controls: actionsButtons })
   const settings = new Bar({ toggleOne: true, group:true, controls: settingsButtons })
 
-  const bar = new Bar({ controls: [actions, settings]})
-
-  return bar
+  return new Bar({ controls: [actions, settings]})
 }

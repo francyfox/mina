@@ -114,7 +114,7 @@ const copyJSON = (content) => {
         </n-button>
       </n-flex>
     </n-space>
-    <div style="margin-top: 5px; overflow-y: auto; max-height: 70vh">
+    <div style="margin-top: 5px; overflow-y: auto; max-height: 40vh">
       <n-code :code="code"
               language="json"
               :word-wrap="true"

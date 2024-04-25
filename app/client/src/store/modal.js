@@ -5,6 +5,8 @@ export const useModalStore = defineStore('modal', () => {
   const showMapElementModal = ref(false)
   const showEraseLayerModal = ref(false)
 
+  const featureJson = ref('')
+
   return {
     showMetaModal,
     showMapElementModal,

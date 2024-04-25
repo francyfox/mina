@@ -5,22 +5,28 @@ import MetaModal from '@/components/MetaModal.vue';
 import MapElementModal from '@/components/MapElementModal.vue';
 import MapHistory from '@/components/MapHistory.vue'
 import { useModalStore } from '@/store/modal.js'
+import { useStackStore } from '@/store/stack.js'
 import { storeToRefs } from 'pinia'
 import { GeoJSON } from 'ol/format'
 import { MapStorage } from '@/module/map-storage/map-storage.js'
 import { useNotification } from 'naive-ui'
 import EraseLayerModal from '@/components/EraseLayerModal.vue'
+import { Style, Stroke, Text, Fill } from 'ol/style'
+import { mapElementStyle } from '@/module/map-element/map-element.style.js'
 
-const map = ref()
-const mapRef = ref()
-const featuresJSON = ref('')
-const currentLayer = ref('')
 const modalStore = useModalStore()
 const { showMetaModal, showMapElementModal, showEraseLayerModal } = storeToRefs(modalStore)
+
+const stackStore = useStackStore();
+const { historyStack, lastFeature } = storeToRefs(stackStore);
+
+const map = ref();
+const mapRef = ref();
+const featuresJSON = ref('');
+const currentLayer = ref('');
 const mapStorage = ref();
 
 const notification = useNotification();
-
 window.notification = notification;
 
 const importLayerJSON = (json) => {
@@ -37,9 +43,36 @@ const eraseLayerData = () => {
   });
 }
 
+const addMapItem = (data) => {
+  const style = new Style(mapElementStyle(data))
+  showMapElementModal.value  = false
+  lastFeature.value[0].setProperties(data)
+  lastFeature.value[0].setId(data.id)
+  lastFeature.value[0].setStyle(style)
+
+  notification.success({
+    title: 'Добавлен',
+    duration: 3000
+  })
+}
+
+const removeMapItem = () => {
+  showMapElementModal.value  = false
+  notification.success({
+    title: 'Успешно',
+    content: 'Элемент удален',
+    duration: 3000
+  })
+}
+
 onMounted(() => {
   mapStorage.value = new MapStorage();
   map.value = initMap();
+
+  map.value.source.addEventListener('addfeature', (event) => {
+    historyStack.value.push(event.feature);
+    showMapElementModal.value = true;
+  })
 
   watch(showMetaModal, () => {
     featuresJSON.value = JSON.stringify(JSON.parse(new GeoJSON().writeFeatures(map.value.vector.getSource().getFeatures())), null, 2)
@@ -59,6 +92,12 @@ onMounted(() => {
 
     <n-modal v-model:show="showEraseLayerModal">
       <erase-layer-modal @confirm="eraseLayerData" />
+    </n-modal>
+
+    <n-modal v-model:show="showMapElementModal">
+      <map-element-modal @confirm="addMapItem"
+                         @cancel="removeMapItem"
+      />
     </n-modal>
   </div>
 </template>
@@ -85,8 +124,10 @@ onMounted(() => {
 }
 
 .ol-control.ol-bar:not(.ol-group) {
+  padding: 0.4em;
   display: flex !important;
   gap: 3em;
+  background: rgba(50, 50, 50, 0.79);
 }
 
 .bar {

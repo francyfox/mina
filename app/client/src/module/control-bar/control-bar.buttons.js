@@ -101,9 +101,12 @@ export class ControlBarButtons {
           this.nbpts = coordinates[0].length;
           if (geometry) geometry.setCoordinates([coordinates[0].concat([coordinates[0][0]])]);
           else geometry = new Polygon(coordinates);
+
           return geometry;
         }
       }),
+      onToggle: () => {
+      },
       active: false,
     })
 
