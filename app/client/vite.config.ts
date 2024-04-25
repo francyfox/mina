@@ -9,5 +9,20 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  server: {
+    proxy: {
+      "/api/search": {
+        target: "https://api.iconbolt.com/search",
+        changeOrigin: true,
+        secure: false,
+      },
+      "/test": {
+        target: "https://www.iconbolt.com/api",
+        changeOrigin: true,
+        secure: false,
+        ws: true,
+      }
+    },
+  },
 })

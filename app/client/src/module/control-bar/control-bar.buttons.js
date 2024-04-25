@@ -8,6 +8,7 @@ import Tranform from 'ol-ext/interaction/Transform'
 import { useModalStore } from '@/store/modal.js'
 import { storeToRefs } from 'pinia'
 import { useNotification } from 'naive-ui'
+import { Point } from 'ol/geom'
 
 
 export class ControlBarButtons {
@@ -90,6 +91,18 @@ export class ControlBarButtons {
       active:true
     })
 
+    const markerButton = new Toggle({
+      html: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 384 512"><path d="M172.268 501.67C26.97 291.031 0 269.413 0 192C0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67c-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80s-80 35.817-80 80s35.817 80 80 80z" fill="currentColor"></path></svg>',
+      className: 'bar-button marker',
+      title: 'Курсор',
+      interaction: new Draw({
+        type: 'Point',
+        source: this.vector.getSource(),
+      }),
+      autoActivate:true,
+      active:true
+    })
+
     const lineButton = new Toggle({
       html: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24"><g fill="none"><path d="M17 3.002a2.998 2.998 0 1 1-2.148 5.09l-5.457 3.12a3.002 3.002 0 0 1 0 1.577l5.458 3.119a2.998 2.998 0 1 1-.746 1.304l-5.457-3.12a2.998 2.998 0 1 1 0-4.184l5.457-3.12A3 3 0 0 1 17 3.003z" fill="currentColor"></path></g></svg>',
       className: 'bar-button line',
@@ -115,6 +128,7 @@ export class ControlBarButtons {
       className: 'bar-button box',
       title: 'Квадрат',
       interaction: new DrawRegular({
+        geometryName: 'Point',
         source: this.vector.getSource(),
         sides: 4,
         canRotate: true
@@ -143,6 +157,7 @@ export class ControlBarButtons {
       transformButton,
       edgeButton,
       empty,
+      markerButton,
       lineButton,
       boxButton,
     ]

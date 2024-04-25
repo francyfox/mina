@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import { computed, ref, h, defineAsyncComponent, Component, watch } from 'vue';
-import { nanoid } from 'nanoid'
+import { ref, h } from 'vue';
+import { NAvatar } from 'naive-ui';
+import { nanoid } from 'nanoid';
 import {
-  FormInst,
   FormRules,
   SelectRenderLabel,
   useNotification,
 } from 'naive-ui';
 import { Tent12Filled } from '@vicons/fluent'
-import * as icons from '@vicons/fluent'
 const emit = defineEmits(['confirm', 'cancel'])
 
 const id = nanoid(8);
@@ -21,6 +20,13 @@ const options = [
     label: 'Палатка',
     value: 'tent'
   }
+]
+
+const iconOptions = [
+  {
+    label: 'cafe',
+    value: 'fa maki-cafe',
+  },
 ]
 
 const formEmptyElement = {
@@ -61,9 +67,17 @@ const renderLabel: SelectRenderLabel = (option) => {
         style: {
           display: 'flex',
           alignItems: 'center'
-        }
+        },
       },
       [
+        h(NAvatar, {
+          src: option.value,
+          round: true,
+          size: 22,
+          style: {
+            marginRight: '4px'
+          }
+        }),
         h(
             'div',
             {
@@ -77,29 +91,6 @@ const renderLabel: SelectRenderLabel = (option) => {
         )
       ]
   )
-}
-
-const iconsOptions = computed(() => {
-  const keys = Object.keys(icons)
-
-  return keys.map(key => ({
-    label: key,
-    value: key
-  }))
-})
-
-const iconReload = ref(false)
-
-const IconAsyncComponent = defineAsyncComponent({
-  loader: async () => {
-    return import('@vicons/fluent').then(
-        (module) => module[value.value.icon]
-    ) as Promise<Component>
-  },
-})
-
-const filterIcons = (pattern: string, option: Object) => {
-  return option.value.toLowerCase().indexOf(pattern.toLowerCase()) !== -1
 }
 
 const handleConfirm = (event) => {
@@ -189,14 +180,11 @@ const handleConfirm = (event) => {
         </n-checkbox-group>
       </n-form-item>
       <n-form-item v-if="value.type === 'area'" label="Иконка" path="icon">
-        <n-icon :size="32" class="icon">
-          <icon-async-component ref="iconRef" v-if="value!.icon" :key="value!.icon" />
-        </n-icon>
         <n-select v-model:value="value!.icon"
                   filterable
-                  :options="iconsOptions"
+                  :options="iconOptions"
                   :render-label="renderLabel"
-                  :filter="filterIcons"
+                  clearable
         />
       </n-form-item>
 

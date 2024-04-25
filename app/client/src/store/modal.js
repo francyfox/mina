@@ -4,12 +4,14 @@ export const useModalStore = defineStore('modal', () => {
   const showMetaModal = ref(false)
   const showMapElementModal = ref(false)
   const showEraseLayerModal = ref(false)
+  const showMarkerModal = ref(false)
 
   const featureJson = ref('')
 
   return {
     showMetaModal,
     showMapElementModal,
-    showEraseLayerModal
+    showEraseLayerModal,
+    showMarkerModal
   }
 })

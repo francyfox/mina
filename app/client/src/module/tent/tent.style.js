@@ -8,7 +8,11 @@ export const tentStyle = (data) => {
       fill: new Fill({
         color: 'black'
       }),
-      offsetY: 0
+      offsetY: 0,
+      stroke: new Stroke({
+        color: 'white',
+        width: 3
+      })
     }),
     stroke: new Stroke({
       width: 2,

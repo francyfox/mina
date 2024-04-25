@@ -11,11 +11,13 @@ import { GeoJSON } from 'ol/format'
 import { MapStorage } from '@/module/map-storage/map-storage.js'
 import { useNotification } from 'naive-ui'
 import EraseLayerModal from '@/components/EraseLayerModal.vue'
-import { Style, Stroke, Text, Fill } from 'ol/style'
+import { Style, Icon } from 'ol/style'
 import { mapElementStyle } from '@/module/map-element/map-element.style.js'
+import MarkerModal from '@/components/MarkerModal.vue'
+import { pointStyle } from '@/module/point/point.style.js'
 
 const modalStore = useModalStore()
-const { showMetaModal, showMapElementModal, showEraseLayerModal } = storeToRefs(modalStore)
+const { showMetaModal, showMapElementModal, showEraseLayerModal, showMarkerModal } = storeToRefs(modalStore)
 
 const stackStore = useStackStore();
 const { historyStack, lastFeature } = storeToRefs(stackStore);
@@ -44,6 +46,7 @@ const eraseLayerData = () => {
 }
 
 const addMapItem = (data) => {
+  console.log(mapElementStyle(data))
   const style = new Style(mapElementStyle(data))
   showMapElementModal.value  = false
   lastFeature.value[0].setProperties(data)
@@ -65,13 +68,30 @@ const removeMapItem = () => {
   })
 }
 
+const markerIcon = (data) => {
+  const style = new Style(pointStyle(data));
+  lastFeature.value[0].setStyle(style)
+
+  showMarkerModal.value = false;
+  notification.success({
+    title: 'Добавлен',
+    duration: 3000
+  })
+}
+
 onMounted(() => {
   mapStorage.value = new MapStorage();
   map.value = initMap();
 
   map.value.source.addEventListener('addfeature', (event) => {
+    const geometry = event.feature.geometryChangeKey_.target.constructor.name
     historyStack.value.push(event.feature);
-    showMapElementModal.value = true;
+
+    if (geometry !== '_Point') {
+      showMapElementModal.value = true;
+    } else {
+      showMarkerModal.value = true;
+    }
   })
 
   watch(showMetaModal, () => {
@@ -98,6 +118,10 @@ onMounted(() => {
       <map-element-modal @confirm="addMapItem"
                          @cancel="removeMapItem"
       />
+    </n-modal>
+
+    <n-modal v-model:show="showMarkerModal">
+      <marker-modal @confirm="markerIcon" />
     </n-modal>
   </div>
 </template>

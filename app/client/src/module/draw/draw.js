@@ -14,7 +14,7 @@ export function customDraw(map, source, drawType) {
     let geometryFunction;
 
     if (value === 'Box') {
-      value = 'Circle';
+      value = 'Marker';
       geometryFunction = createBox();
     }
 
