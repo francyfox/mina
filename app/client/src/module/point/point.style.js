@@ -20,14 +20,3 @@ export const pointStyle = (data) => {
     }),
   }
 }
-
-export const pointDoorStyle = (angle) => {
-  return {
-    // https://static.thenounproject.com/png/1328910-200.png
-    image: new Icon({
-      src: 'https://openlayers.org/en/latest/examples/data/icon.png',
-      scale: 0.8,
-      // rotation: angle
-    }),
-  }
-}

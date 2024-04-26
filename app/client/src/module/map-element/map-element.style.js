@@ -2,8 +2,9 @@ import { Stroke } from 'ol/style'
 import { tentStyle } from '@/module/tent/tent.style.js'
 import { areaStyle } from '@/module/area/area.style.js'
 
-export const mapElementStyle = (data) => {
+export const mapElementStyle = (data, geometry) => {
   const style = {
+    geometry,
     stroke: new Stroke({
       width: 2,
       color: data.color

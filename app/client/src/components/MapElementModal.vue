@@ -22,12 +22,7 @@ const options = [
   }
 ]
 
-const iconOptions = [
-  {
-    label: 'cafe',
-    value: 'fa maki-cafe',
-  },
-]
+const iconOptions = ref([])
 
 const formEmptyElement = {
   id,
@@ -92,7 +87,38 @@ const renderLabel: SelectRenderLabel = (option) => {
       ]
   )
 }
+const handleSearchIcons = async (query: string) => {
+  loading.value = true;
 
+  try {
+    if (!query.length) {
+      iconOptions.value = []
+      return
+    }
+
+    const data = (await import('@/assets/fluent-filled.json')).icons
+    const filtred = data.filter(
+        (item) => ~item.name.indexOf(query)
+    )
+
+    const naiveOptions = filtred.slice(0, 200).map((i) => {
+      return {
+        label: i.name,
+        value: i.preview,
+      }
+    })
+
+    iconOptions.value = naiveOptions
+  } catch (e) {
+    notification.error({
+      title: 'Ошибка',
+      content: 'Не удалось загрузить иконки'
+    })
+  }
+
+  loading.value = false;
+}
+const loading = ref(false);
 const handleConfirm = (event) => {
   event.preventDefault();
 
@@ -184,7 +210,9 @@ const handleConfirm = (event) => {
                   filterable
                   :options="iconOptions"
                   :render-label="renderLabel"
+                  @search="handleSearchIcons"
                   clearable
+                  remote
         />
       </n-form-item>
 

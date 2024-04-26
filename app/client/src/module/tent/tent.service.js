@@ -1,13 +1,11 @@
 import { Point } from 'ol/geom'
+import { getCenter } from '@/utils/utils.js'
 
 export const createDoors = (feature, sides) => {
   const polygonGeometry = feature.getGeometry();
   const centerPoints = centerCoordinates(polygonGeometry.flatCoordinates, sides)
 
   if (centerPoints) {
-    console.log(centerPoints)
-    console.log(polygonGeometry.flatCoordinates)
-
     return centerPoints.map((center) => new Point(center));
   } else {
     throw new Error('Cannot create doors, wrong coordinates')
@@ -46,11 +44,3 @@ const centerCoordinates = (coordinates, sides) => {
   })
 }
 
-const getCenter = (coordinates) => {
-  const x1 = coordinates[0];
-  const x2 = coordinates[1];
-  const y1 = coordinates[2];
-  const y2 = coordinates[3];
-
-  return [((x1 + x2) / 2), ((y1 + y2) / 2)];
-}

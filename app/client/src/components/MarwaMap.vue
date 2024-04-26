@@ -4,19 +4,21 @@ import { initMap } from '@/module/map/map.init';
 import MetaModal from '@/components/MetaModal.vue';
 import MapElementModal from '@/components/MapElementModal.vue';
 import MapHistory from '@/components/MapHistory.vue'
-import { useModalStore } from '@/store/modal.js'
-import { useStackStore } from '@/store/stack.js'
+import { useModalStore } from '@/store/modal'
+import { useStackStore } from '@/store/stack'
 import { storeToRefs } from 'pinia'
 import { GeoJSON } from 'ol/format'
-import { MapStorage } from '@/module/map-storage/map-storage.js'
+import { MapStorage } from '@/module/map-storage/map-storage'
 import { useNotification } from 'naive-ui'
 import EraseLayerModal from '@/components/EraseLayerModal.vue'
-import { Style, Icon } from 'ol/style'
-import { mapElementStyle } from '@/module/map-element/map-element.style.js'
+import { Style } from 'ol/style'
+import { mapElementStyle } from '@/module/map-element/map-element.style'
 import MarkerModal from '@/components/MarkerModal.vue'
-import { pointDoorStyle, pointStyle } from '@/module/point/point.style.js'
-import { createDoors } from '@/module/tent/tent.service.js'
+import { pointStyle } from '@/module/point/point.style'
+import { createDoors } from '@/module/tent/tent.service'
 import { GeometryCollection } from 'ol/geom'
+import { pointIconStyle } from '@/module/area/area.style'
+import { createIconGeometry } from '@/module/area/area.service.js'
 
 const modalStore = useModalStore()
 const { showMetaModal, showMapElementModal, showEraseLayerModal, showMarkerModal } = storeToRefs(modalStore)
@@ -48,17 +50,23 @@ const eraseLayerData = () => {
 }
 
 const addMapItem = (data) => {
-  const style = new Style({...mapElementStyle(data), geometry: lastFeature.value[0].getGeometry() })
+  const style = new Style(mapElementStyle(data, lastFeature.value[0].getGeometry()))
   showMapElementModal.value = false
-  const doors = createDoors(lastFeature.value[0], data.doorPositions)
-  const doorStyles = doors.map((_) => new Style(pointDoorStyle(90)))
 
   lastFeature.value[0].setProperties(data)
   lastFeature.value[0].setId(data.id)
-  lastFeature.value[0].setGeometry(new GeometryCollection([lastFeature.value[0].getGeometry(), ...doors]))
-  lastFeature.value[0].setStyle([style, ...doorStyles])
 
-  console.log(lastFeature.value[0], lastFeature.value[0].getGeometry().getGeometries())
+  if (data.type === 'tent') {
+    const doors = createDoors(lastFeature.value[0], data.doorPositions)
+    const doorStyles = doors.map((_) => new Style(pointDoorStyle(90)))
+    lastFeature.value[0].setGeometry(new GeometryCollection([lastFeature.value[0].getGeometry(), ...doors]))
+    lastFeature.value[0].setStyle([style, ...doorStyles])
+  } else {
+    const iconGeometry = createIconGeometry(lastFeature.value[0].getGeometry().flatCoordinates)
+    const iconStyle = new Style(pointIconStyle(iconGeometry, data))
+    lastFeature.value[0].setGeometry(new GeometryCollection([lastFeature.value[0].getGeometry(), iconGeometry]))
+    lastFeature.value[0].setStyle([style, iconStyle])
+  }
 
   notification.success({
     title: 'Добавлен',
