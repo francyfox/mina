@@ -39,9 +39,9 @@ const formEmptyTent = {
   doorPositions: []
 }
 
-const formEmptyArea = {
-  icon: '',
-}
+// const formEmptyArea = {
+//   icon: '',
+// }
 
 const rules = {
   name: {
@@ -66,6 +66,7 @@ const renderLabel: SelectRenderLabel = (option) => {
       },
       [
         h(NAvatar, {
+          // @ts-expect-error
           src: option.value,
           round: true,
           size: 22,
