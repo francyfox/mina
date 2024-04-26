@@ -1,5 +1,4 @@
 import { Text, Fill, Stroke } from 'ol/style'
-import FontSymbol from 'ol-ext/style/FontSymbol'
 export const areaStyle = (data) => {
   return {
     text: new Text({

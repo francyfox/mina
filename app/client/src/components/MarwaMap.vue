@@ -14,7 +14,9 @@ import EraseLayerModal from '@/components/EraseLayerModal.vue'
 import { Style, Icon } from 'ol/style'
 import { mapElementStyle } from '@/module/map-element/map-element.style.js'
 import MarkerModal from '@/components/MarkerModal.vue'
-import { pointStyle } from '@/module/point/point.style.js'
+import { pointDoorStyle, pointStyle } from '@/module/point/point.style.js'
+import { createDoors } from '@/module/tent/tent.service.js'
+import { GeometryCollection } from 'ol/geom'
 
 const modalStore = useModalStore()
 const { showMetaModal, showMapElementModal, showEraseLayerModal, showMarkerModal } = storeToRefs(modalStore)
@@ -46,12 +48,17 @@ const eraseLayerData = () => {
 }
 
 const addMapItem = (data) => {
-  console.log(mapElementStyle(data))
-  const style = new Style(mapElementStyle(data))
-  showMapElementModal.value  = false
+  const style = new Style({...mapElementStyle(data), geometry: lastFeature.value[0].getGeometry() })
+  showMapElementModal.value = false
+  const doors = createDoors(lastFeature.value[0], data.doorPositions)
+  const doorStyles = doors.map((_) => new Style(pointDoorStyle(90)))
+
   lastFeature.value[0].setProperties(data)
   lastFeature.value[0].setId(data.id)
-  lastFeature.value[0].setStyle(style)
+  lastFeature.value[0].setGeometry(new GeometryCollection([lastFeature.value[0].getGeometry(), ...doors]))
+  lastFeature.value[0].setStyle([style, ...doorStyles])
+
+  console.log(lastFeature.value[0], lastFeature.value[0].getGeometry().getGeometries())
 
   notification.success({
     title: 'Добавлен',
@@ -86,6 +93,7 @@ onMounted(() => {
   map.value.source.addEventListener('addfeature', (event) => {
     const geometry = event.feature.geometryChangeKey_.target.constructor.name
     historyStack.value.push(event.feature);
+    console.log(event.feature.getGeometry())
 
     if (geometry !== '_Point') {
       showMapElementModal.value = true;
