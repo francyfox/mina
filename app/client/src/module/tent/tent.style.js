@@ -1,4 +1,4 @@
-import { Fill, Stroke, Text } from 'ol/style'
+import { Fill, Icon, Stroke, Text } from 'ol/style'
 
 export const tentStyle = (data) => {
   return {
@@ -21,5 +21,16 @@ export const tentStyle = (data) => {
     fill: new Fill({
       color: data.color + '33'
     })
+  }
+}
+
+export const pointDoorStyle = (angle) => {
+  return {
+    // https://static.thenounproject.com/png/1328910-200.png
+    image: new Icon({
+      src: 'https://openlayers.org/en/latest/examples/data/icon.png',
+      scale: 0.8,
+      // rotation: angle
+    }),
   }
 }

@@ -19,6 +19,7 @@ import { createDoors } from '@/module/tent/tent.service'
 import { GeometryCollection } from 'ol/geom'
 import { pointIconStyle } from '@/module/area/area.style'
 import { createIconGeometry } from '@/module/area/area.service.js'
+import { pointDoorStyle } from '@/module/tent/tent.style.js'
 
 const modalStore = useModalStore()
 const { showMetaModal, showMapElementModal, showEraseLayerModal, showMarkerModal } = storeToRefs(modalStore)
