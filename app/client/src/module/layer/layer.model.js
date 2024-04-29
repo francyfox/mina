@@ -5,11 +5,19 @@ export class LayerModel {
   position= 0
   mapElementCollection = []
 
-  constructor(name, position) {
-    this._id = nanoid(5)
+  /**
+   * @param {{ id?: string, name: string, position: number, mapElementCollection?: [] }} data
+   */
+  constructor(data) {
+    const { id, name, position, mapElementCollection } = data
+    this._id = id ?? nanoid(5)
     this.name = name
     this.position = position
-    this.mapElementCollection = []
+    this.mapElementCollection = mapElementCollection ?? []
+  }
+
+  set id(id) {
+    this._id = id
   }
 
   get id() {

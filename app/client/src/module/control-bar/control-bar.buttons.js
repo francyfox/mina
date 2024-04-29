@@ -7,6 +7,8 @@ import DrawRegular from 'ol-ext/interaction/DrawRegular'
 import Tranform from 'ol-ext/interaction/Transform'
 import { useModalStore } from '@/store/modal.js'
 import { storeToRefs } from 'pinia'
+import { containsXY } from 'ol/extent'
+import { shiftKeyOnly } from 'ol/events/condition'
 
 
 export class ControlBarButtons {
@@ -138,7 +140,11 @@ export class ControlBarButtons {
       html: '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 24 24"><g fill="none"><path d="M4.5 6.25c0-.966.784-1.75 1.75-1.75h1.5a.75.75 0 0 0 0-1.5h-1.5A3.25 3.25 0 0 0 3 6.25v1.5a.75.75 0 0 0 1.5 0v-1.5zM17.75 4.5c.966 0 1.75.784 1.75 1.75v1.5a.75.75 0 0 0 1.5 0v-1.5A3.25 3.25 0 0 0 17.75 3h-1.5a.75.75 0 0 0 0 1.5h1.5zm0 15a1.75 1.75 0 0 0 1.75-1.75v-1.5a.75.75 0 0 1 1.5 0v1.5A3.25 3.25 0 0 1 17.75 21h-1.5a.75.75 0 0 1 0-1.5h1.5zm-11.5 0a1.75 1.75 0 0 1-1.75-1.75v-1.5a.75.75 0 0 0-1.5 0v1.5A3.25 3.25 0 0 0 6.25 21h1.5a.75.75 0 0 0 0-1.5h-1.5zm2-13.5A2.25 2.25 0 0 0 6 8.25v7.5A2.25 2.25 0 0 0 8.25 18h7.5A2.25 2.25 0 0 0 18 15.75v-7.5A2.25 2.25 0 0 0 15.75 6h-7.5z" fill="currentColor"></path></g></svg>',
       className: 'bar-button transform',
       title: 'Манипуляции',
-      interaction: new Tranform(),
+      interaction: new Tranform({
+        enableRotatedTransform: false,
+        addCondition: shiftKeyOnly,
+        keepRectangle: false,
+      }),
       active: false,
     })
 

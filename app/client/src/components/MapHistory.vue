@@ -1,7 +1,18 @@
 <script setup lang="ts">
-defineProps<{
-  data: []
-}>()
+import { useStackStore } from '@/store/stack';
+import { computed } from 'vue';
+import { storeToRefs } from 'pinia';
+
+const props = defineProps<{}>()
+
+const stackStore = useStackStore();
+const { historyStack } = storeToRefs(stackStore);
+
+const data = computed(() => historyStack.value.reverse().slice(0, 3));
+const featuresName = (feature) => {
+  const name = feature.getProperties().name;
+  return !!name ? name : feature.getGeometryName()
+}
 </script>
 
 <template>
@@ -12,7 +23,7 @@ defineProps<{
 
     <div class="history-list">
       <n-button v-for="item in data" type="info">
-        {{ item }}
+        {{ featuresName(item) }}
       </n-button>
     </div>
   </div>

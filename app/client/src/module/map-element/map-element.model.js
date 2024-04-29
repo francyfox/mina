@@ -1,18 +1,31 @@
 import { nanoid } from 'nanoid'
 export class MapElementModel {
   _id
-  _layer_id
+  _layerId
   name = ''
   type = 'tent'
   _featureJson = null
   isHidden = false
-  constructor(name, type, isHidden, featureJson) {
-    this._id = nanoid(5)
-    this._layer_id = nanoid(5)
+
+  /**
+   * @param { { id?: string, layerId: string, name: string, type?: string, isHidden?: boolean, featureJson?: string } } data
+   */
+  constructor(data) {
+    const { id, layerId, name, type, isHidden, featureJson } = data
+    this._id = id ?? nanoid(5)
+    this._layerId = layerId
     this.name = name
-    this.type = type
-    this.isHidden = isHidden
-    this._featureJson = featureJson
+    this.type = type ?? 'tent'
+    this.isHidden = isHidden ?? false
+    this._featureJson = featureJson ?? ''
+  }
+
+  set id(id) {
+    this._id = id
+  }
+
+  get id() {
+    return this._id
   }
 
   set featureJson(featureJson) {
@@ -24,9 +37,9 @@ export class MapElementModel {
   }
 
   set layerId(layerId) {
-    this._layer_id = layerId
+    this._layerId = layerId
   }
   get layerId() {
-    return this._layer_id
+    return this._layerId
   }
 }

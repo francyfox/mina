@@ -20,6 +20,9 @@ import { GeometryCollection } from 'ol/geom'
 import { pointIconStyle } from '@/module/area/area.style'
 import { createIconGeometry } from '@/module/area/area.service.js'
 import { pointDoorStyle } from '@/module/tent/tent.style.js'
+import { LayerModel } from '@/module/layer/layer.model.js'
+import { MapElementModel } from '@/module/map-element/map-element.model.js'
+import { MapModel } from '@/module/map/map.model.js'
 
 const modalStore = useModalStore()
 const { showMetaModal, showMapElementModal, showEraseLayerModal, showMarkerModal } = storeToRefs(modalStore)
@@ -43,7 +46,10 @@ const importLayerJSON = (json) => {
 
 const eraseLayerData = () => {
   mapStorage.value.setStore({});
+  mapRef.value.innerHTML = '';
+  loadMap();
   showEraseLayerModal.value = false;
+
   notification.success({
     title: 'Данные удалены',
     duration: 1000
@@ -51,7 +57,7 @@ const eraseLayerData = () => {
 }
 
 const addMapItem = (data) => {
-  const style = new Style(mapElementStyle(data, lastFeature.value[0].getGeometry()))
+  const style = new Style(mapElementStyle(data))
   showMapElementModal.value = false
 
   lastFeature.value[0].setProperties(data)
@@ -60,7 +66,7 @@ const addMapItem = (data) => {
   if (data.type === 'tent') {
     const doors = createDoors(lastFeature.value[0], data.doorPositions)
     const doorStyles = doors.map((_) => new Style(pointDoorStyle(90)))
-    lastFeature.value[0].setGeometry(new GeometryCollection([lastFeature.value[0].getGeometry(), ...doors]))
+    lastFeature.value[0].setGeometry(new GeometryCollection([...doors, lastFeature.value[0].getGeometry()]))
     lastFeature.value[0].setStyle([style, ...doorStyles])
   } else {
     const iconGeometry = createIconGeometry(lastFeature.value[0].getGeometry().flatCoordinates)
@@ -68,6 +74,19 @@ const addMapItem = (data) => {
     lastFeature.value[0].setGeometry(new GeometryCollection([lastFeature.value[0].getGeometry(), iconGeometry]))
     lastFeature.value[0].setStyle([style, iconStyle])
   }
+
+  // TODO: пока так. Мы теряем методы после сериализации
+  const mapStore = mapStorage.value.getStore();
+  const mapElement = new MapElementModel({
+    layerId: mapStore.currentLayer,
+    featureJson: JSON.stringify(JSON.parse(new GeoJSON().writeFeature(lastFeature.value[0]))),
+    ...data
+  });
+
+  const layer = mapStore.layers[0];
+  layer.mapElementCollection.push(mapElement);
+  const map = new MapModel(layer.id, [ layer ]);
+  mapStorage.value.setStore(map);
 
   notification.success({
     title: 'Добавлен',
@@ -95,7 +114,7 @@ const markerIcon = (data) => {
   })
 }
 
-onMounted(() => {
+const loadMap = () => {
   mapStorage.value = new MapStorage();
   map.value = initMap();
 
@@ -114,12 +133,16 @@ onMounted(() => {
   watch(showMetaModal, () => {
     featuresJSON.value = JSON.stringify(JSON.parse(new GeoJSON().writeFeatures(map.value.vector.getSource().getFeatures())), null, 2)
   })
+}
+
+onMounted(() => {
+  loadMap();
 })
 </script>
 
 <template>
   <div ref="mapRef" id="map" class="map">
-    <map-history :data="['test']" />
+    <map-history />
 
     <n-modal v-model:show="showMetaModal">
       <meta-modal :code="featuresJSON"

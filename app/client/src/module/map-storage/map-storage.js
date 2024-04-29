@@ -9,9 +9,11 @@ export class MapStorage {
   constructor() {
     const store = this.getStore()
 
-    if (!store) {
-      const layer = new LayerModel('layer-0', 0);
-      console.log(layer.id)
+    if (!window.localStorage.getItem(this.storeId)) {
+      const layer = new LayerModel({
+        name: 'layer-0',
+        position: 0
+      });
       const map = new MapModel(layer.id, [ layer ])
 
       this.setStore(map)
