@@ -12,6 +12,10 @@ import { controlBar } from '@/module/control-bar/control-bar.js'
 import CopyPaste from 'ol-ext/interaction/CopyPaste';
 import { GeoJSON } from 'ol/format'
 import { featureCollection } from '@/module/feature/feature.collection.js'
+import { Fill, Stroke, Style } from 'ol/style'
+import CircleStyle from 'ol/style/Circle'
+import { calculateCenter } from '@/utils/utils'
+import { MultiPoint, Point } from 'ol/geom'
 
 
 export const initMap = (features = []) => {
@@ -24,8 +28,71 @@ export const initMap = (features = []) => {
     features: new GeoJSON().readFeatures(featureCollection(features))
   });
 
+  const style = new Style({
+    geometry: function (feature) {
+      const modifyGeometry = feature.get('modifyGeometry');
+      return modifyGeometry ? modifyGeometry.geometry : feature.getGeometry();
+    },
+    fill: new Fill({
+      color: 'rgba(255, 255, 255, 0.2)',
+    }),
+    stroke: new Stroke({
+      color: '#ffcc33',
+      width: 2,
+    }),
+    image: new CircleStyle({
+      radius: 7,
+      fill: new Fill({
+        color: '#ffcc33',
+      }),
+    }),
+  });
+
   const vector = new VectorLayer({
     source: source,
+    style: function (feature) {
+      const styles = [style];
+      const modifyGeometry = feature.get('modifyGeometry');
+      const geometry = modifyGeometry
+        ? modifyGeometry.geometry
+        : feature.getGeometry();
+      const result = calculateCenter(geometry);
+      const center = result.center;
+      if (center) {
+        styles.push(
+          new Style({
+            geometry: new Point(center),
+            image: new CircleStyle({
+              radius: 4,
+              fill: new Fill({
+                color: '#ff3333',
+              }),
+            }),
+          }),
+        );
+        const coordinates = result.coordinates;
+        if (coordinates) {
+          const minRadius = result.minRadius;
+          const sqDistances = result.sqDistances;
+          const rsq = minRadius * minRadius;
+          const points = coordinates.filter(function (coordinate, index) {
+            return sqDistances[index] > rsq;
+          });
+          styles.push(
+            new Style({
+              geometry: new MultiPoint(points),
+              image: new CircleStyle({
+                radius: 4,
+                fill: new Fill({
+                  color: '#33cc33',
+                }),
+              }),
+            }),
+          );
+        }
+      }
+      return styles;
+    },
   });
 
 

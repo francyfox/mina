@@ -23,6 +23,7 @@ import { pointDoorStyle } from '@/module/tent/tent.style.js'
 import { LayerModel } from '@/module/layer/layer.model.js'
 import { MapElementModel } from '@/module/map-element/map-element.model.js'
 import { MapModel } from '@/module/map/map.model.js'
+import { styleGeometry } from '@/utils/utils.js'
 
 const modalStore = useModalStore()
 const { showMetaModal, showMapElementModal, showEraseLayerModal, showMarkerModal } = storeToRefs(modalStore)
@@ -57,7 +58,7 @@ const eraseLayerData = () => {
 }
 
 const addMapItem = (data) => {
-  const style = new Style(mapElementStyle(data))
+  let styles = { 'Polygon': new Style(mapElementStyle(data)) }
   showMapElementModal.value = false
 
   lastFeature.value[0].setProperties(data)
@@ -65,14 +66,15 @@ const addMapItem = (data) => {
 
   if (data.type === 'tent') {
     const doors = createDoors(lastFeature.value[0], data.doorPositions)
-    const doorStyles = doors.map((_) => new Style(pointDoorStyle(90)))
+    const doorStyle = { 'Point': new Style(pointDoorStyle()) }
+    styles = {...styles, ...doorStyle }
     lastFeature.value[0].setGeometry(new GeometryCollection([...doors, lastFeature.value[0].getGeometry()]))
-    lastFeature.value[0].setStyle([style, ...doorStyles])
+    lastFeature.value[0].setStyle(styleGeometry(styles, lastFeature.value[0]))
   } else {
     const iconGeometry = createIconGeometry(lastFeature.value[0].getGeometry().flatCoordinates)
     const iconStyle = new Style(pointIconStyle(iconGeometry, data))
     lastFeature.value[0].setGeometry(new GeometryCollection([lastFeature.value[0].getGeometry(), iconGeometry]))
-    lastFeature.value[0].setStyle([style, iconStyle])
+    lastFeature.value[0].setStyle()
   }
 
   // TODO: пока так. Мы теряем методы после сериализации
@@ -121,7 +123,6 @@ const loadMap = () => {
   map.value.source.addEventListener('addfeature', (event) => {
     const geometry = event.feature.geometryChangeKey_.target.constructor.name
     historyStack.value.push(event.feature);
-    console.log(event.feature.getGeometry())
 
     if (geometry !== '_Point') {
       showMapElementModal.value = true;

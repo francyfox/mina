@@ -4,7 +4,10 @@ import { areaStyle } from '@/module/area/area.style.js'
 
 export const mapElementStyle = (data, geometry) => {
   const style = {
-    geometry,
+    geometry: function (feature) {
+      const modifyGeometry = feature.get('modifyGeometry');
+      return modifyGeometry ? modifyGeometry.geometry : geometry;
+    },
     stroke: new Stroke({
       width: 2,
       color: data.color

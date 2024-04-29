@@ -144,6 +144,8 @@ export class ControlBarButtons {
         enableRotatedTransform: false,
         addCondition: shiftKeyOnly,
         keepRectangle: false,
+        noFlip: true,
+        translateBBox: false
       }),
       active: false,
     })
