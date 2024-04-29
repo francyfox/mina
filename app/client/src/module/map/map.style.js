@@ -1,3 +1,3 @@
-export const mapStyle = () => {
+export const mapDefaultStyle = () => {
 
 }

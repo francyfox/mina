@@ -4,8 +4,8 @@ import { OSM } from 'ol/source';
 import VectorSource from 'ol/source/Vector';
 import VectorLayer from 'ol/layer/Vector';
 import {
-  defaults as defaultInteractions, DragRotateAndZoom
-} from 'ol/interaction';
+  defaults as defaultInteractions, DragRotateAndZoom, Modify, Translate
+} from 'ol/interaction'
 import Map from 'ol/Map';
 import { olMapData } from '@/module/map/map.data';
 import { controlBar } from '@/module/control-bar/control-bar.js'
@@ -16,6 +16,8 @@ import { Fill, Stroke, Style } from 'ol/style'
 import CircleStyle from 'ol/style/Circle'
 import { calculateCenter } from '@/utils/utils'
 import { MultiPoint, Point } from 'ol/geom'
+import { featureModifyStyle, onModifyEnd, onModifyStart } from '@/module/feature/feature.modify-style.js'
+import { never, platformModifierKeyOnly, primaryAction } from 'ol/events/condition'
 
 
 export const initMap = (features = []) => {
@@ -98,17 +100,37 @@ export const initMap = (features = []) => {
 
   // const select = new Select();
 
-  // const translate = new Translate({
-  //   features: select.getFeatures(),
-  // });
+  const translate = new Translate({
+    condition: function (event) {
+      return primaryAction(event) && platformModifierKeyOnly(event);
+    },
+    layers: [vector],
+  });
 
   // TODO: copyPaste not working
   const copyPaste = new CopyPaste()
   const dragRotateZoom =  new DragRotateAndZoom()
   const bar = controlBar(vector)
 
+  const defaultStyle = new Modify({source: source})
+    .getOverlay()
+    .getStyleFunction();
+
+  const modify = new Modify({
+    source: source,
+    condition: function (event) {
+      return primaryAction(event) && !platformModifierKeyOnly(event);
+    },
+    deleteCondition: never,
+    insertVertexCondition: never,
+    style: (feature) => featureModifyStyle(defaultStyle, feature)
+  });
+
+  modify.on('modifystart', onModifyStart)
+  modify.on('modifyend', onModifyEnd)
+
   const map = new Map({
-    interactions: defaultInteractions().extend([copyPaste, dragRotateZoom]),
+    interactions: defaultInteractions().extend([copyPaste, dragRotateZoom, modify, translate]),
     layers: [raster, vector],
     target: 'map',
     view: new View(olMapData),
