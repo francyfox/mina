@@ -58,24 +58,12 @@ const eraseLayerData = () => {
 }
 
 const addMapItem = (data) => {
-  let styles = { 'Polygon': new Style(mapElementStyle(data)) }
+  map.value.modify.dispatchEvent('change')
+
   showMapElementModal.value = false
 
   lastFeature.value[0].setProperties(data)
   lastFeature.value[0].setId(data.id)
-
-  if (data.type === 'tent') {
-    const doors = createDoors(lastFeature.value[0], data.doorPositions)
-    const doorStyle = { 'Point': new Style(pointDoorStyle()) }
-    styles = {...styles, ...doorStyle }
-    lastFeature.value[0].setGeometry(new GeometryCollection([...doors, lastFeature.value[0].getGeometry()]))
-    lastFeature.value[0].setStyle(styleGeometry(styles, lastFeature.value[0]))
-  } else {
-    const iconGeometry = createIconGeometry(lastFeature.value[0].getGeometry().flatCoordinates)
-    const iconStyle = new Style(pointIconStyle(iconGeometry, data))
-    lastFeature.value[0].setGeometry(new GeometryCollection([lastFeature.value[0].getGeometry(), iconGeometry]))
-    lastFeature.value[0].setStyle()
-  }
 
   // TODO: пока так. Мы теряем методы после сериализации
   const mapStore = mapStorage.value.getStore();
@@ -87,8 +75,8 @@ const addMapItem = (data) => {
 
   const layer = mapStore.layers[0];
   layer.mapElementCollection.push(mapElement);
-  const map = new MapModel(layer.id, [ layer ]);
-  mapStorage.value.setStore(map);
+  const mapModel = new MapModel(layer.id, [ layer ]);
+  mapStorage.value.setStore(mapModel);
 
   notification.success({
     title: 'Добавлен',
@@ -143,27 +131,27 @@ onMounted(() => {
 
 <template>
   <div ref="mapRef" id="map" class="map">
-    <map-history />
+<!--    <map-history />-->
 
-    <n-modal v-model:show="showMetaModal">
-      <meta-modal :code="featuresJSON"
-                  @import="importLayerJSON"
-      />
-    </n-modal>
+<!--    <n-modal v-model:show="showMetaModal">-->
+<!--      <meta-modal :code="featuresJSON"-->
+<!--                  @import="importLayerJSON"-->
+<!--      />-->
+<!--    </n-modal>-->
 
-    <n-modal v-model:show="showEraseLayerModal">
-      <erase-layer-modal @confirm="eraseLayerData" />
-    </n-modal>
+<!--    <n-modal v-model:show="showEraseLayerModal">-->
+<!--      <erase-layer-modal @confirm="eraseLayerData" />-->
+<!--    </n-modal>-->
 
-    <n-modal v-model:show="showMapElementModal">
-      <map-element-modal @confirm="addMapItem"
-                         @cancel="removeMapItem"
-      />
-    </n-modal>
+<!--    <n-modal v-model:show="showMapElementModal">-->
+<!--      <map-element-modal @confirm="addMapItem"-->
+<!--                         @cancel="removeMapItem"-->
+<!--      />-->
+<!--    </n-modal>-->
 
-    <n-modal v-model:show="showMarkerModal">
-      <marker-modal @confirm="markerIcon" />
-    </n-modal>
+<!--    <n-modal v-model:show="showMarkerModal">-->
+<!--      <marker-modal @confirm="markerIcon" />-->
+<!--    </n-modal>-->
   </div>
 </template>
 

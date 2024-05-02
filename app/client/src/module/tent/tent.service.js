@@ -3,12 +3,17 @@ import { getCenter } from '@/utils/utils.js'
 
 export const createDoors = (feature, sides) => {
   const polygonGeometry = feature.getGeometry();
-  const centerPoints = centerCoordinates(polygonGeometry.flatCoordinates, sides)
 
-  if (centerPoints) {
-    return centerPoints.map((center) => new Point(center));
+  if (polygonGeometry.flatCoordinates) {
+    const centerPoints = centerCoordinates(polygonGeometry.flatCoordinates, sides)
+
+    if (centerPoints) {
+      return centerPoints.map((center) => new Point(center));
+    } else {
+      throw new Error('Cannot create doors, wrong coordinates')
+    }
   } else {
-    throw new Error('Cannot create doors, wrong coordinates')
+    return null;
   }
 }
 

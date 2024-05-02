@@ -75,43 +75,61 @@ const copyJSON = (content) => {
               Импорт метаданных слоя
             </n-text>
             <n-p depth="3" style="margin: 8px 0 0 0">
-              Положите файл .geojson или .json сюда
+              Перенесите файл сюда (форматы: geojson/json/kml)
             </n-p>
           </n-upload-dragger>
         </n-upload>
 
-        <n-button type="error"
-                  @click="exportJSON(code)"
-        >
-          <n-space align="center">
-            <icon size="18">
-              <ArrowDownload16Filled />
-            </icon>
-            Экспорт JSON
-          </n-space>
-        </n-button>
+        <n-flex vertical>
+          <n-form-item label="Экспорт">
+            <n-flex>
+              <n-button type="tertiary"
+                        @click="exportJSON(code)"
+              >
+                <n-space align="center">
+                  <icon size="18">
+                    <ArrowDownload16Filled />
+                  </icon>
+                  JSON
+                </n-space>
+              </n-button>
 
-        <n-button type="tertiary"
-                  @click="exportJSON(code, 'geojson', 'text/plain')"
-        >
-          <n-space align="center">
-            <icon size="18">
-              <ArrowDownload16Filled />
-            </icon>
-            Экспорт GEOJSON
-          </n-space>
-        </n-button>
+              <n-button type="tertiary"
+                        @click="exportJSON(code, 'geojson', 'text/plain')"
+              >
+                <n-space align="center">
+                  <icon size="18">
+                    <ArrowDownload16Filled />
+                  </icon>
+                  GEOJSON
+                </n-space>
+              </n-button>
 
-        <n-button type="default"
-                  @click="copyJSON(code)"
-        >
-          <n-space align="center">
-            <icon size="18">
-              <Copy16Filled />
-            </icon>
-            Скопировать код
-          </n-space>
-        </n-button>
+              <n-button type="tertiary"
+                        @click="exportJSON(code, 'geojson', 'text/plain')"
+              >
+                <n-space align="center">
+                  <icon size="18">
+                    <ArrowDownload16Filled />
+                  </icon>
+                  KML
+                </n-space>
+              </n-button>
+            </n-flex>
+          </n-form-item>
+
+          <n-button type="default"
+                    @click="copyJSON(code)"
+          >
+            <n-space align="center">
+              <icon size="18">
+                <Copy16Filled />
+              </icon>
+              Скопировать код
+            </n-space>
+          </n-button>
+        </n-flex>
+
       </n-flex>
     </n-space>
     <div style="margin-top: 5px; overflow-y: auto; max-height: 40vh">
