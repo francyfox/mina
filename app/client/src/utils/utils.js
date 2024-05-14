@@ -15,7 +15,7 @@ export function styleGeometry(styles, feature) {
   return geoms.map((geom) => {
     const type = geom.getType();
     const style = styles[type];
-    console.log(styles)
+
     style.setGeometry(geom);
     return style;
   })

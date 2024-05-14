@@ -55,7 +55,6 @@ export const onModifyStart = (event) => {
 export const onModifyEnd = (event) => {
   event.features.forEach(function (feature) {
     const modifyGeometry = feature.get('modifyGeometry');
-    console.log(modifyGeometry)
     if (modifyGeometry) {
       feature.setGeometry(modifyGeometry.geometry);
       feature.unset('modifyGeometry', true);
@@ -66,7 +65,6 @@ export const onModifyEnd = (event) => {
 export const onModifyChanged = (event) => {
   const feature = event.target.features_.array_.slice(-1)[0];
   const modifyGeometry = feature.get('modifyGeometry');
-  console.log(feature)
   if (modifyGeometry) {
     feature.setGeometry(modifyGeometry.geometry);
     feature.unset('modifyGeometry', true);

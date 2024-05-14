@@ -19,6 +19,7 @@
     "ol-contextmenu": "^5.4.0",
     "ol-ext": "^4.0.18",
     "pinia": "^2.1.7",
+    "proj4": "^2.11.0",
     "vue": "^3.4.21",
     "vue3-openlayers": "^7.0.0"
   },

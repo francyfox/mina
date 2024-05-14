@@ -133,25 +133,25 @@ onMounted(() => {
   <div ref="mapRef" id="map" class="map">
 <!--    <map-history />-->
 
-<!--    <n-modal v-model:show="showMetaModal">-->
-<!--      <meta-modal :code="featuresJSON"-->
-<!--                  @import="importLayerJSON"-->
-<!--      />-->
-<!--    </n-modal>-->
+    <n-modal v-model:show="showMetaModal">
+      <meta-modal :code="featuresJSON"
+                  @import="importLayerJSON"
+      />
+    </n-modal>
 
-<!--    <n-modal v-model:show="showEraseLayerModal">-->
-<!--      <erase-layer-modal @confirm="eraseLayerData" />-->
-<!--    </n-modal>-->
+    <n-modal v-model:show="showEraseLayerModal">
+      <erase-layer-modal @confirm="eraseLayerData" />
+    </n-modal>
 
-<!--    <n-modal v-model:show="showMapElementModal">-->
-<!--      <map-element-modal @confirm="addMapItem"-->
-<!--                         @cancel="removeMapItem"-->
-<!--      />-->
-<!--    </n-modal>-->
+    <n-modal v-model:show="showMapElementModal">
+      <map-element-modal @confirm="addMapItem"
+                         @cancel="removeMapItem"
+      />
+    </n-modal>
 
-<!--    <n-modal v-model:show="showMarkerModal">-->
-<!--      <marker-modal @confirm="markerIcon" />-->
-<!--    </n-modal>-->
+    <n-modal v-model:show="showMarkerModal">
+      <marker-modal @confirm="markerIcon" />
+    </n-modal>
   </div>
 </template>
 

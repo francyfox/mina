@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+<Document>
+<name>marwa_fire</name>
+<Style id="style1">
+	<IconStyle>
+		<Icon>
+			<href>http://maps.gstatic.com/mapfiles/ms2/micons/red-dot.png</href>
+		</Icon>
+	</IconStyle>
+</Style>
+<Placemark>
+<name>Civil Defense 502 - 520</name>
+<description><![CDATA[<p>full_id: n6742260218
+<br/>osm_id: 6742260218
+<br/>osm_type: node
+<br/>amenity: fire_station
+<br/>name: Civil Defense 502 - 520</p>]]></description>
+<ExtendedData>
+	<Data name="full_id"><displayName>full_id</displayName><value><![CDATA[n6742260218]]></value></Data>
+	<Data name="osm_id"><displayName>osm_id</displayName><value><![CDATA[6742260218]]></value></Data>
+	<Data name="osm_type"><displayName>osm_type</displayName><value><![CDATA[node]]></value></Data>
+	<Data name="amenity"><displayName>amenity</displayName><value><![CDATA[fire_station]]></value></Data>
+	<Data name="name"><displayName>name</displayName><value><![CDATA[Civil Defense 502 - 520]]></value></Data>
+</ExtendedData>
+<styleUrl>#style1</styleUrl>
+	<Point>
+		<coordinates>39.8992826,21.4096235,0.000</coordinates>
+	</Point>
+</Placemark>
+
+<Placemark>
+<name>Civil Defense Unit 501 - 608</name>
+<description><![CDATA[<p>full_id: n6767681433
+<br/>osm_id: 6767681433
+<br/>osm_type: node
+<br/>amenity: fire_station
+<br/>name: Civil Defense Unit 501 - 608</p>]]></description>
+<ExtendedData>
+	<Data name="full_id"><displayName>full_id</displayName><value><![CDATA[n6767681433]]></value></Data>
+	<Data name="osm_id"><displayName>osm_id</displayName><value><![CDATA[6767681433]]></value></Data>
+	<Data name="osm_type"><displayName>osm_type</displayName><value><![CDATA[node]]></value></Data>
+	<Data name="amenity"><displayName>amenity</displayName><value><![CDATA[fire_station]]></value></Data>
+	<Data name="name"><displayName>name</displayName><value><![CDATA[Civil Defense Unit 501 - 608]]></value></Data>
+</ExtendedData>
+<styleUrl>#style1</styleUrl>
+	<Point>
+		<coordinates>39.9051657,21.4096119,0.000</coordinates>
+	</Point>
+</Placemark>
+
+</Document>
+</kml>
