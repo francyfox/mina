@@ -115,3 +115,43 @@ input[type="text"] {
   flex-direction: column;
   gap: 20px;
 }
+
+.sync {
+  top: 80px;
+  right: 12px;
+  padding: 4px;
+  position: fixed;
+  display: flex;
+  background: linear-gradient(45deg, #df960d 0%, #ffdb4d 50%);
+  box-shadow: 0 0 2px rgba(255, 219, 77, 0.71);
+  z-index: 10;
+  border-radius: 5px;
+  animation: pulse 2s linear infinite;
+  transition: visibility .3s ease-in-out;
+}
+
+.sync svg {
+  width: 48px;
+  height: 48px;
+  color: #232323;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes spin {
+  100% {
+    opacity: 1;
+    transform:rotate(360deg);
+  }
+}

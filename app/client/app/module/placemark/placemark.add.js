@@ -1,3 +1,6 @@
+import { addFeature, updateFeature } from '../db/features/features.service.js'
+import { nanoid } from 'nanoid'
+
 export const togglePointMenu = ({ e, placemark, map}) => {
   const menu = document.getElementById('menu')
 
@@ -6,7 +9,7 @@ export const togglePointMenu = ({ e, placemark, map}) => {
   } else {
     const menuContent = document.createElement('div')
     menuContent.id = 'menu'
-    menuContent.innerHTML = '<ul id="menu_list" xmlns="http://www.w3.org/1999/html">\
+    menuContent.innerHTML = '<ul id="menu_list">\
                       <li>Номер палатки: <br /> <input type="text" name="icon_text" /></li>\
                       <li>Подсказка: <br /> <input type="text" name="hint_text" /></li>\
                       <li>Описание: <br /> <input type="text" name="balloon_text" /></li>\
@@ -54,7 +57,7 @@ export const togglePointMenu = ({ e, placemark, map}) => {
       document.getElementById('menu').remove();
     })
 
-    document.getElementById('menu').querySelector('button[type="submit"]').addEventListener('click', () => {
+    document.getElementById('menu').querySelector('button[type="submit"]').addEventListener('click', async () => {
       placemark.properties.set({
         iconContent: iconText.value,
         hintContent: hintText.value,
@@ -69,30 +72,68 @@ export const togglePointMenu = ({ e, placemark, map}) => {
       })
 
       document.getElementById('menu').remove();
+      document.querySelector('.sync').style.visibility = 'visible'
+      try {
+        await updateFeature(placemark.properties.get('id'), {
+          options: placemark.options.getAll(),
+          properties: {
+            ...placemark.properties.getAll(),
+          }
+        })
+        document.querySelector('.sync').style.visibility = 'hidden'
+      } catch (e) {
+        alert('Не удалось обновить данные по метке')
+        console.error(e)
+      }
     })
   }
 }
-export const placemarkAdd = (
-  map,
-  coords,
-  description = {
-    iconContent: 'текст',
-    hintContent: '',
-    balloonContent: '',
+export const placemarkAdd = async (
+  {
+    map,
+    coords,
+    description = {
+      iconContent: 'текст',
+      hintContent: '',
+      balloonContent: '',
+    },
+    preset = 'islands#darkOrangeStretchyIcon',
   },
-  preset = 'islands#darkOrangeStretchyIcon',
+  showPopup = false,
+  addToDb = false
 ) => {
   const placemark = new ymaps.Placemark(coords, description, {
     preset,
     draggable: true
-  });
+  })
 
-  console.log(placemark.events)
   placemark.events.add('contextmenu', (e) => togglePointMenu({e, placemark, map}))
 
   map.geoObjects.add(placemark)
 
-  placemark.events.fire('contextmenu', {
-    position: window.mousePosition
-  })
+  if (showPopup) {
+    placemark.events.fire('contextmenu', {
+      position: window.mousePosition
+    })
+  }
+
+  if (addToDb) {
+    document.querySelector('.sync').style.visibility = 'visible'
+    try {
+      await addFeature({
+        id: nanoid(),
+        type: 'Feature',
+        options: placemark.options.getAll(),
+        geometry: { type: 'Point', coordinates: placemark.geometry._coordinates },
+        properties: {
+          ...placemark.properties.getAll(),
+        }
+      })
+      document.querySelector('.sync').style.visibility = 'hidden'
+    } catch (e) {
+      alert('Не удалось добавить маркер ')
+      console.error(e)
+    }
+
+  }
 }

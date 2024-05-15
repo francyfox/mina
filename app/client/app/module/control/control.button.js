@@ -6,11 +6,11 @@ export const buttonPoint = (map) => {
   const button = new ymaps.control.Button('<b>Метка</b>');
   button.events.add('select', function () {
     window.currentButton = 'point'
-    map.events.add('click', (e) => {
+    map.events.add('click', async (e) => {
       if (window.currentButton === 'point') {
         const coords = e.get('coords')
 
-        placemarkAdd(map, coords)
+        await placemarkAdd({ map, coords }, true, true)
       }
     })
   })
@@ -52,8 +52,6 @@ export const buttonGEOJSON = (map, objectManager) => {
             }
           })
         })
-
-
 
         const json = {
           "type": "FeatureCollection",
