@@ -1,5 +1,5 @@
-import { importGEOJSON } from '../format/format.geojson.js'
 import { nanoid } from 'nanoid'
+import { importGEOJSON } from '../format/format.geojson.js'
 import { placemarkAdd } from '../placemark/placemark.add.js'
 
 export const buttonPoint = (map) => {
