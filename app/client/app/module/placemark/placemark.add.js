@@ -1,4 +1,4 @@
-import { addFeature, updateFeature } from '../db/features/features.service.js'
+import { addFeature, removeFeature, updateFeature } from '../db/features/features.service.js'
 import { nanoid } from 'nanoid'
 
 export const togglePointMenu = ({ e, placemark, map}) => {
@@ -55,6 +55,16 @@ export const togglePointMenu = ({ e, placemark, map}) => {
     document.querySelector('button[name="remove"]').addEventListener('click', () => {
       map.geoObjects.remove(placemark)
       document.getElementById('menu').remove();
+
+      document.querySelector('.sync').style.visibility = 'visible'
+      try {
+        console.log(placemark.properties.get('id'))
+        removeFeature(placemark.properties.get('id'))
+        document.querySelector('.sync').style.visibility = 'hidden'
+      } catch (e) {
+        alert('Не удалось удалить метку')
+        console.error(e)
+      }
     })
 
     document.getElementById('menu').querySelector('button[type="submit"]').addEventListener('click', async () => {
@@ -93,6 +103,7 @@ export const placemarkAdd = async (
     map,
     coords,
     description = {
+      id: nanoid(),
       iconContent: 'текст',
       hintContent: '',
       balloonContent: '',
@@ -108,6 +119,22 @@ export const placemarkAdd = async (
   })
 
   placemark.events.add('contextmenu', (e) => togglePointMenu({e, placemark, map}))
+  placemark.events.add('dragend', async (e) => {
+
+    document.querySelector('.sync').style.visibility = 'visible'
+    try {
+      await updateFeature(placemark.properties.get('id'), {
+        geometry: {
+          type: 'Point',
+          coordinates: placemark.geometry._coordinates
+        }
+      })
+      document.querySelector('.sync').style.visibility = 'hidden'
+    } catch (e) {
+      alert('Не удалось записать перемещение точки в бд')
+      console.error(e)
+    }
+  })
 
   map.geoObjects.add(placemark)
 
@@ -121,7 +148,7 @@ export const placemarkAdd = async (
     document.querySelector('.sync').style.visibility = 'visible'
     try {
       await addFeature({
-        id: nanoid(),
+        id: placemark.properties.get('id'),
         type: 'Feature',
         options: placemark.options.getAll(),
         geometry: { type: 'Point', coordinates: placemark.geometry._coordinates },
