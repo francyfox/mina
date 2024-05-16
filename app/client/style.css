@@ -74,6 +74,12 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
+button.sm {
+  padding: 0.3em 0.6em;
+  font-size: 0.8em;
+}
+
 button:hover {
   border-color: #646cff;
 }
@@ -147,9 +153,15 @@ input[type="text"] {
   position: absolute;
   display: flex;
   flex-direction: column;
+  gap: 10px;
   border-radius: 8px;
   background: #fff;
   box-sizing: border-box;
+}
+
+.map-list-actions {
+  display: flex;
+  gap: 5px;
 }
 
 .map-list-container {
@@ -160,8 +172,8 @@ input[type="text"] {
   height: 100%;
 }
 
-.map-list-search {
-  margin-bottom: 10px;
+.map-list-container.capture-mode {
+  cursor: pointer;
 }
 
 .map-list-search input {

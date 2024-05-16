@@ -10,9 +10,17 @@
   <body>
     <div id="map" style="width: 100%; height: 100vh"></div>
     <div class="map-list">
-      <form class="map-list-search">
+      <div class="map-list-search">
         <input type="search" placeholder="Поиск">
-      </form>
+      </div>
+      <div class="map-list-actions">
+        <button id="captureAll" type="button" class="sm">Выделить все</button>
+
+        <label for="captureMode">
+          <input id="captureMode" name="captureMode" type="checkbox">
+          <span>Режим выделения</span>
+        </label>
+      </div>
       <div class="map-list-container"></div>
     </div>
     <div class="sync">

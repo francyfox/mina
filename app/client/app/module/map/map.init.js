@@ -10,7 +10,6 @@ export async function mapInit(){
     controls: ['zoomControl', 'typeSelector'],
     type: 'yandex#satellite'
   });
-  const objectManager = new ymaps.ObjectManager()
 
   const point = buttonPoint(map)
   map.controls.add(point)
@@ -19,14 +18,13 @@ export async function mapInit(){
     const features = await getFeatures()
 
     for (const feature of features) {
-      const geometry =
-        await placemarkAdd({
-          map,
-          coords: feature.geometry,
-          description: feature.properties,
-          preset: feature.properties.preset,
-          visible: feature.options.visible
-        })
+      await placemarkAdd({
+        map,
+        coords: feature.geometry,
+        description: feature.properties,
+        preset: feature.properties.preset,
+        visible: feature.options.visible
+      })
     }
 
     document.querySelector('.sync').style.visibility = 'hidden'
