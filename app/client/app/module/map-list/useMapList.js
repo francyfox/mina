@@ -85,6 +85,6 @@ export const useMapList = (data, geoObjects) => {
   const checkboxes = shadow.querySelectorAll('input[type="checkbox"]')
 
   for (const item of checkboxes) {
-    item.addEventListener('change', (e) => onMapListItemCheck(e, geoObjects))
+    item.addEventListener('change', (e) => onMapListItemCheck({ e, geoObjects, shadow }))
   }
 }
