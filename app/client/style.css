@@ -65,6 +65,9 @@ h1 {
 }
 
 button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 8px;
   border: 1px solid transparent;
   padding: 0.6em 1.2em;
@@ -75,9 +78,19 @@ button {
   transition: border-color 0.25s;
 }
 
+button svg {
+  width: 24px;
+  height: 24px;
+}
+
 button.sm {
   padding: 0.3em 0.6em;
   font-size: 0.8em;
+}
+
+button.sm svg {
+  width: 18px;
+  height: 18px;
 }
 
 button:hover {

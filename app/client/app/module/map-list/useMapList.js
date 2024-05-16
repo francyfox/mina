@@ -69,7 +69,6 @@ export const useMapList = (data, geoObjects) => {
   shadow.appendChild(style);
 
   for (const item of data) {
-    console.log(transformPresetToColor(item.options?.preset))
     shadow.append(createMapListItem({
       id: item.id,
       name: item.properties.iconContent,

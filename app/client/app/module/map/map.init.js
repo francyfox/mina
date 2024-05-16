@@ -1,4 +1,4 @@
-import { buttonPoint } from '../control/control.button.js'
+import { buttonMapList, buttonPoint } from '../control/control.button.js'
 import { placemarkAdd } from '../placemark/placemark.add.js'
 import { getFeatures } from '../db/features/features.service.js'
 import { useMapList } from '../map-list/useMapList.js'
@@ -12,7 +12,9 @@ export async function mapInit(){
   });
 
   const point = buttonPoint(map)
+  const mapList = buttonMapList()
   map.controls.add(point)
+  map.controls.add(mapList)
 
   try {
     const features = await getFeatures()

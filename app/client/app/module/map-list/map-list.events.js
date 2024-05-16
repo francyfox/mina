@@ -32,10 +32,10 @@ export const toogleVisibilityMapItem = async ({ e, geoObjects }) => {
 export const onMapListItemCheck = async ({ e, geoObjects, shadow }) => {
   if (document.querySelector('.map-list-container').classList.contains('capture-mode')) {
     const checkboxes = shadow.querySelectorAll('.map-list-item.active input[type="checkbox"]')
+    const value = e.target.checked
 
     for (const checkbox of checkboxes) {
-      console.log(checkbox, e.target)
-      checkbox.checked = e.target.checked
+      checkbox.checked = value
 
       await toogleVisibilityMapItem({ e, geoObjects })
     }

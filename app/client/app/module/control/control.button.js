@@ -22,6 +22,29 @@ export const buttonPoint = (map) => {
   return button
 }
 
+export const buttonMapList = () => {
+  const button = new ymaps.control.Button({
+    data: {
+      content: '<b>Список меток</b>'
+    },
+    options: {
+      // Поскольку кнопка будет менять вид в зависимости от размера карты,
+      // зададим ей три разных значения maxWidth в массиве.
+      maxWidth: [28, 150, 178]
+    }
+  });
+
+  button.events.add('select', () => {
+    document.querySelector('.map-list').style.display = 'none'
+  })
+
+  button.events.add('deselect', () => {
+    document.querySelector('.map-list').style.display = 'flex'
+  })
+
+  return button
+}
+
 export const buttonGEOJSON = (map, objectManager) => {
   const button = new ymaps.control.Button('<b>GEOJSON</b>');
 
