@@ -89,7 +89,7 @@ export const buttonGEOJSON = (map, objectManager) => {
             const json = JSON.parse(reader.result)
             importGEOJSON(json, objectManager, map)
           } catch (e) {
-            console.log(e)
+            console.error(e)
             alert('Не удалось импортировать файл')
           }
         };

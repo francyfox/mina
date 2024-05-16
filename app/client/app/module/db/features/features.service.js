@@ -1,6 +1,6 @@
 
-import { addDoc, collection, getDocs, updateDoc, deleteDoc, query, where } from 'firebase/firestore'
-import { db, featuresRef } from '../db.firebase.js'
+import { addDoc, getDocs, updateDoc, deleteDoc, query, where } from 'firebase/firestore'
+import { featuresRef } from '../db.firebase.js'
 
 export const getFeatures = async () => {
   const features = []

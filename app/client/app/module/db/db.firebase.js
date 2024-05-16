@@ -11,5 +11,4 @@ const firebaseConfig = {
 }
 export const firebase = initializeApp(firebaseConfig);
 export const db = getFirestore(firebase);
-
 export const featuresRef = collection(db, 'features')

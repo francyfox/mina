@@ -52,14 +52,13 @@ export const togglePointMenu = ({ e, placemark, map}) => {
     square.value = placemark.properties.get('square')
     count.value = placemark.properties.get('count')
 
-    document.querySelector('button[name="remove"]').addEventListener('click', () => {
+    document.querySelector('button[name="remove"]').addEventListener('click', async () => {
       map.geoObjects.remove(placemark)
       document.getElementById('menu').remove();
 
       document.querySelector('.sync').style.visibility = 'visible'
       try {
-        console.log(placemark.properties.get('id'))
-        removeFeature(placemark.properties.get('id'))
+        await removeFeature(placemark.properties.get('id'))
         document.querySelector('.sync').style.visibility = 'hidden'
       } catch (e) {
         alert('Не удалось удалить метку')
@@ -109,12 +108,14 @@ export const placemarkAdd = async (
       balloonContent: '',
     },
     preset = 'islands#darkOrangeStretchyIcon',
+    visible = true
   },
   showPopup = false,
   addToDb = false
 ) => {
   const placemark = new ymaps.Placemark(coords, description, {
     preset,
+    visible,
     draggable: true
   })
 
