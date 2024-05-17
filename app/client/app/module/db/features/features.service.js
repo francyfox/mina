@@ -26,3 +26,12 @@ export const updateFeature = async (id, data) => {
   const querySnapshot = await getDocs(q)
   await updateDoc(querySnapshot.docs[0].ref, data)
 }
+export const updateManyFeatures = async (items) => {
+  const querySnapshot = await getDocs(featuresRef)
+  querySnapshot.forEach( async (doc) => {
+    const item = items.find(i => i.id === doc.data().id)
+    if (item) {
+      await updateDoc(doc.ref, item.data)
+    }
+  })
+}

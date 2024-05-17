@@ -1,4 +1,5 @@
-import { updateFeature } from '../db/features/features.service.js'
+import { updateFeature, updateManyFeatures } from '../db/features/features.service.js'
+import { getPlacemarkById } from '../../utils.js'
 export const onMapListSearch = ({ search, shadow }) => {
   for (const item of shadow.querySelectorAll('.map-list-item')) {
     const value = search.value.toLowerCase()
@@ -9,15 +10,12 @@ export const onMapListSearch = ({ search, shadow }) => {
     }
   }
 }
-
-export const toogleVisibilityMapItem = async ({ e, geoObjects }) => {
-  const placemark = ymaps.geoQuery(geoObjects).search(`properties.id = "${e.target.dataset.id}"`)
-  placemark.setOptions('visible', e.target.checked)
-  const id = placemark._objects[0].properties.get('id')
+export const toggleVisibilityMapItem = async ({ id = '', value, geoObjects}) => {
+  const placemark = getPlacemarkById(id, geoObjects)
+  placemark.setOptions('visible', value)
   const options = placemark._objects[0].options.getAll()
 
   document.querySelector('.sync').style.visibility = 'visible'
-
   try {
     await updateFeature(id, {
       options
@@ -29,17 +27,45 @@ export const toogleVisibilityMapItem = async ({ e, geoObjects }) => {
   }
 }
 
-export const onMapListItemCheck = async ({ e, geoObjects, shadow }) => {
+export const toggleVisibilityMapItems = async ({ items, geoObjects }) => {
+  const queryDataItems = items.map((i) => {
+    const { id, value } = i
+    const placemark = getPlacemarkById(id, geoObjects)
+    placemark.setOptions('visible', value)
+
+    return {
+      id,
+      data: {
+        options: placemark._objects[0].options.getAll()
+      }
+    }
+  })
+
+  document.querySelector('.sync').style.visibility = 'visible'
+  try {
+    await updateManyFeatures(queryDataItems)
+
+    document.querySelector('.sync').style.visibility = 'hidden'
+  } catch (e) {
+    alert('Не удалось записать параметр точки')
+    console.error(e)
+  }
+}
+
+export const onMapListItemCheck = async ({ e, shadow, geoObjects }) => {
   if (document.querySelector('.map-list-container').classList.contains('capture-mode')) {
     const checkboxes = shadow.querySelectorAll('.map-list-item.active input[type="checkbox"]')
     const value = e.target.checked
+    const items = [...checkboxes].map(i => {
+      i.checked = value
+      return {
+        id: i.dataset.id,
+        value
+      }
+    })
 
-    for (const checkbox of checkboxes) {
-      checkbox.checked = value
-
-      await toogleVisibilityMapItem({ e, geoObjects })
-    }
+    await toggleVisibilityMapItems({ items, geoObjects })
   } else {
-    await toogleVisibilityMapItem({ e, geoObjects })
+    await toggleVisibilityMapItem({ id: e.target.dataset.id, value: e.target.checked, geoObjects})
   }
 }
