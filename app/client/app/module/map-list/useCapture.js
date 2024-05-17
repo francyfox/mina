@@ -2,12 +2,12 @@ export const useCapture = (el) => {
   const captureMode = document.getElementById('captureMode')
   const captureAll = document.getElementById('captureAll')
   const container = document.querySelector('.map-list-container')
-  const mapListItems = el.querySelectorAll('.map-list-item')
+  const mapListItems = el.querySelectorAll('.map-list-item .icon')
 
   for (const item of mapListItems) {
     item.addEventListener('click', (e) => {
       if (container.classList.contains('capture-mode')) {
-        e.target.classList.toggle('active')
+        e.target.closest('.map-list-item').classList.toggle('active')
       }
     })
   }

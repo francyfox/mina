@@ -1,5 +1,6 @@
 import { updateFeature, updateManyFeatures } from '../db/features/features.service.js'
 import { getPlacemarkById } from '../../utils.js'
+
 export const onMapListSearch = ({ search, shadow }) => {
   for (const item of shadow.querySelectorAll('.map-list-item')) {
     const value = search.value.toLowerCase()
@@ -10,7 +11,7 @@ export const onMapListSearch = ({ search, shadow }) => {
     }
   }
 }
-export const toggleVisibilityMapItem = async ({ id = '', value, geoObjects}) => {
+export const toggleVisibilityMapItem = async ({ id = '', value, geoObjects }) => {
   const placemark = getPlacemarkById(id, geoObjects)
   placemark.setOptions('visible', value)
   const options = placemark._objects[0].options.getAll()
@@ -66,6 +67,6 @@ export const onMapListItemCheck = async ({ e, shadow, geoObjects }) => {
 
     await toggleVisibilityMapItems({ items, geoObjects })
   } else {
-    await toggleVisibilityMapItem({ id: e.target.dataset.id, value: e.target.checked, geoObjects})
+    await toggleVisibilityMapItem({ id: e.target.dataset.id, value: e.target.checked, geoObjects })
   }
 }

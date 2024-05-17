@@ -1,5 +1,4 @@
-
-import { addDoc, getDocs, updateDoc, deleteDoc, query, where } from 'firebase/firestore'
+import { addDoc, deleteDoc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import { featuresRef } from '../db.firebase.js'
 
 export const getFeatures = async () => {
@@ -28,7 +27,7 @@ export const updateFeature = async (id, data) => {
 }
 export const updateManyFeatures = async (items) => {
   const querySnapshot = await getDocs(featuresRef)
-  querySnapshot.forEach( async (doc) => {
+  querySnapshot.forEach(async (doc) => {
     const item = items.find(i => i.id === doc.data().id)
     if (item) {
       await updateDoc(doc.ref, item.data)

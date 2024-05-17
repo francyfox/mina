@@ -3,14 +3,16 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: #242424;
   background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --bulma-control-padding-vertical: 2px !important;
+  --bulma-control-padding-horizontal: 4px !important;
+  --bulma-control-height: 30px !important;
 }
 
 a {
@@ -18,6 +20,7 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -49,9 +52,11 @@ h1 {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.vanilla:hover {
   filter: drop-shadow(0 0 2em #f7df1eaa);
 }
@@ -64,31 +69,12 @@ h1 {
   color: #888;
 }
 
-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
 button svg {
   width: 24px;
   height: 24px;
 }
 
-button.sm {
-  padding: 0.3em 0.6em;
-  font-size: 0.8em;
-}
-
-button.sm svg {
+button.is-small svg {
   width: 18px;
   height: 18px;
 }
@@ -96,6 +82,7 @@ button.sm svg {
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -110,24 +97,31 @@ button:focus-visible {
   border-radius: 12px;
   z-index: 2
 }
+
 #menu ul {
   padding: 0 0 20px;
   list-style-type: none;
   margin: 0;
 }
+
 input[type="text"] {
   width: 100%;
-  height: 20px;
 }
 
 .modal {
   top: 50px;
   left: 13px;
   width: 320px;
+  height: 50px;
   padding: 15px;
   position: fixed;
   background: #fff;
+  display: flex;
   z-index: 10;
+
+  button, form {
+    width: 100%;
+  }
 }
 
 .modal form {
@@ -202,6 +196,16 @@ input[type="text"] {
   transition: border-color 0.25s;
 }
 
+.map-list-header {
+
+  ul {
+    padding-left: 70px;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 0.5em;
+    display: grid;
+  }
+}
+
 @keyframes pulse {
   0% {
     opacity: 1;
@@ -217,6 +221,6 @@ input[type="text"] {
 @keyframes spin {
   100% {
     opacity: 1;
-    transform:rotate(360deg);
+    transform: rotate(360deg);
   }
 }

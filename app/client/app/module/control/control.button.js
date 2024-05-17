@@ -1,9 +1,8 @@
 import { nanoid } from 'nanoid'
-import { importGEOJSON } from '../format/format.geojson.js'
 import { placemarkAdd } from '../placemark/placemark.add.js'
 
 export const buttonPoint = (map) => {
-  const button = new ymaps.control.Button('<b>Метка</b>');
+  const button = new ymaps.control.Button('<b>Метка</b>')
   button.events.add('select', function () {
     window.currentButton = 'point'
     map.events.add('click', async (e) => {
@@ -32,7 +31,7 @@ export const buttonMapList = () => {
       // зададим ей три разных значения maxWidth в массиве.
       maxWidth: [28, 150, 178]
     }
-  });
+  })
 
   button.events.add('select', () => {
     document.querySelector('.map-list').style.display = 'none'
@@ -46,7 +45,7 @@ export const buttonMapList = () => {
 }
 
 export const buttonGEOJSON = (map, objectManager) => {
-  const button = new ymaps.control.Button('<b>GEOJSON</b>');
+  const button = new ymaps.control.Button('<b>GEOJSON</b>')
 
   button.events.add('click', function () {
     if (document.querySelector('.modal')) {
@@ -57,7 +56,7 @@ export const buttonGEOJSON = (map, objectManager) => {
       modal.id = 'geoJson'
       modal.innerHTML = `<form>
 <!--       <input name="upload" type="file" />-->
-       <button type="button" name="export">Экспорт</button>
+       <button class="button" type="button" name="export">Экспорт</button>
     </form>`
 
       document.body.append(modal)
@@ -71,32 +70,32 @@ export const buttonGEOJSON = (map, objectManager) => {
             options: i.options.getAll(),
             geometry: { type: 'Point', coordinates: i.geometry._coordinates },
             properties: {
-              ...i.properties.getAll(),
+              ...i.properties.getAll()
             }
           })
         })
 
         const json = {
-          "type": "FeatureCollection",
-          "metadata": {
-            "name": "Marwa",
-            "creator": "Yandex Map Constructor",
-            "description": "marwa"
+          'type': 'FeatureCollection',
+          'metadata': {
+            'name': 'Marwa',
+            'creator': 'Yandex Map Constructor',
+            'description': 'marwa'
           },
           features: objects
         }
 
-        const a = document.createElement("a");
+        const a = document.createElement('a')
         a.href = URL.createObjectURL(new Blob([JSON.stringify(json, null, 2)], {
-          type: "application/geo+json"
-        }));
+          type: 'application/geo+json'
+        }))
 
         const date = new Date().toISOString()
 
-        a.setAttribute("download", `marwa_${date}.geojson`);
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        a.setAttribute('download', `marwa_${date}.geojson`)
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
 
         modal.remove()
       })

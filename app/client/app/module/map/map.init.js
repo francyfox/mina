@@ -2,14 +2,15 @@ import { buttonGEOJSON, buttonMapList, buttonPoint } from '../control/control.bu
 import { placemarkAdd } from '../placemark/placemark.add.js'
 import { getFeatures } from '../db/features/features.service.js'
 import { useMapList } from '../map-list/useMapList.js'
+import { useCounters } from '@/module/map-list/useCounters.js'
 
-export async function mapInit(){
-  const map = new ymaps.Map("map", {
-    center: [21.42089031185469,39.89985412245573],
+export async function mapInit() {
+  const map = new ymaps.Map('map', {
+    center: [21.42089031185469, 39.89985412245573],
     zoom: 19,
     controls: ['zoomControl', 'typeSelector'],
     type: 'yandex#satellite'
-  });
+  })
 
   const objectManager = new ymaps.ObjectManager()
 
@@ -37,6 +38,7 @@ export async function mapInit(){
     document.querySelector('.sync').style.visibility = 'hidden'
 
     useMapList(features, map.geoObjects)
+    useCounters(map.geoObjects)
   } catch (e) {
     alert('Не удалось загрузить из БД')
     console.error(e)
