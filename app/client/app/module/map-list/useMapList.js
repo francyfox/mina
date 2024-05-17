@@ -136,5 +136,12 @@ export const useMapList = (data, geoObjects) => {
       el.querySelector('.count').textContent = count
       el.querySelector('.square').textContent = square
     })
+
+    geoObject.options.events.add("change", function () {
+      const id = geoObject.properties.get('id')
+      const color = transformPresetToColor(geoObject.options.get('preset'))
+      const el = shadow.querySelector(`[data-id="${id}"]`)
+      el.style.backgroundColor = color
+    })
   })
 }
