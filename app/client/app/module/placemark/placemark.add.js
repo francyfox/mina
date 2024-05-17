@@ -10,11 +10,11 @@ export const togglePointMenu = ({ e, placemark, map }) => {
     const menuContent = document.createElement('div')
     menuContent.id = 'menu'
     menuContent.innerHTML = '<ul id="menu_list">\
-                      <li>Номер палатки: <br /> <input class="input" type="text" name="icon_text" /></li>\
-                      <li>Подсказка: <br /> <input class="input" type="text" name="hint_text" /></li>\
-                      <li>Описание: <br /> <input class="input" type="text" name="balloon_text" /></li>\
-                      <li>Кв. м: <br /> <input class="input" type="number" name="square_number" /></li>\
-                      <li>Кол-во: <br /> <input class="input" type="number" name="count_number" /></li>\
+                      <li>Номер палатки: <br /> <input class="input" type="text" name="icon_text" maxlength="5" /></li>\
+                      <li>Подсказка: <br /> <input class="input" type="text" name="hint_text" maxlength="20" /></li>\
+                      <li>Описание: <br /> <input class="input" type="text" name="balloon_text" maxlength="50" /></li>\
+                      <li>Кв. м: <br /> <input class="input" type="number" name="square_number" max="999" /></li>\
+                      <li>Кол-во: <br /> <input class="input" type="number" name="count_number" max="999" /></li>\
                       <li>Цвет: <br /> \
                       <div class="select"> \
                       <select name="color">\
@@ -71,12 +71,15 @@ export const togglePointMenu = ({ e, placemark, map }) => {
     })
 
     document.querySelector('button[name="remove"]').addEventListener('click', async () => {
+      const id = placemark.properties.get('id')
       map.geoObjects.remove(placemark)
       document.getElementById('menu').remove()
 
+      const event = new CustomEvent('list:remove', { detail: id })
+      document.querySelector('.map-list').dispatchEvent(event)
       document.querySelector('.sync').style.visibility = 'visible'
       try {
-        await removeFeature(placemark.properties.get('id'))
+        await removeFeature(id)
         document.querySelector('.sync').style.visibility = 'hidden'
       } catch (e) {
         alert('Не удалось удалить метку')
@@ -164,17 +167,20 @@ export const placemarkAdd = async (
   }
 
   if (addToDb) {
+    const placemarkData = {
+      id: placemark.properties.get('id'),
+      type: 'Feature',
+      options: placemark.options.getAll(),
+      geometry: { type: 'Point', coordinates: placemark.geometry._coordinates },
+      properties: {
+        ...placemark.properties.getAll()
+      }
+    }
+    const event = new CustomEvent('list:add', { detail: placemarkData })
+    document.querySelector('.map-list').dispatchEvent(event)
     document.querySelector('.sync').style.visibility = 'visible'
     try {
-      await addFeature({
-        id: placemark.properties.get('id'),
-        type: 'Feature',
-        options: placemark.options.getAll(),
-        geometry: { type: 'Point', coordinates: placemark.geometry._coordinates },
-        properties: {
-          ...placemark.properties.getAll()
-        }
-      })
+      await addFeature(placemarkData)
       document.querySelector('.sync').style.visibility = 'hidden'
     } catch (e) {
       alert('Не удалось добавить маркер ')

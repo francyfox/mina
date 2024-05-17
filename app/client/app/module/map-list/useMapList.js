@@ -117,6 +117,8 @@ export const useMapList = (data, geoObjects) => {
 
   useCapture(shadow)
 
+  const mapListContainer =  new MapListContainer(shadow)
+
   search.addEventListener('input', () => onMapListSearch({ search, shadow }))
 
   const checkboxes = shadow.querySelectorAll('input[type="checkbox"]')
@@ -146,7 +148,17 @@ export const useMapList = (data, geoObjects) => {
     })
   })
 
+  mapList.addEventListener('list:add', (e) => {
+    const placemark = e.detail
+    mapListContainer.push(placemark)
+  })
+
+  mapList.addEventListener('list:remove', (e) => {
+    const id = e.detail
+    mapListContainer.removeById(id)
+  })
+
   return {
-    mapListContainer: new MapListContainer(shadow)
+    mapListContainer
   }
 }

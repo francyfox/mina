@@ -8,14 +8,15 @@ export class MapListContainer {
   }
 
   push(item) {
-    createMapListItem({
+    this.container.append(createMapListItem({
       id: item.id,
       name: item.properties.iconContent,
       visible: item?.options?.visible ?? true,
       count: item.properties?.count ?? 0,
       square: item.properties?.square ?? 0,
       color: transformPresetToColor(item.options?.preset)
-    })
+    }))
+
   }
 
   removeById(id) {
