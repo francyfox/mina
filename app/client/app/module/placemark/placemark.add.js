@@ -180,6 +180,7 @@ export const placemarkAdd = async (
       alert('Не удалось добавить маркер ')
       console.error(e)
     }
-
   }
+
+  return placemark
 }

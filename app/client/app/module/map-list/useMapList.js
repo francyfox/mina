@@ -1,6 +1,7 @@
 import { onMapListItemCheck, onMapListSearch } from './map-list.events.js'
 import { transformPresetToColor } from '../../utils.js'
 import { useCapture } from './useCapture.js'
+import { MapListContainer } from '@/module/map-list/map-list.container.js'
 
 const css = `
 .map-list-item {
@@ -63,7 +64,7 @@ const css = `
    list-style: none;
    display: grid;
    gap: 0.5em;
-   grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+   grid-template-columns: 60px 60px;
 }
 
 .map-list-item ul li {
@@ -144,4 +145,8 @@ export const useMapList = (data, geoObjects) => {
       el.style.backgroundColor = color
     })
   })
+
+  return {
+    mapListContainer: new MapListContainer(shadow)
+  }
 }
