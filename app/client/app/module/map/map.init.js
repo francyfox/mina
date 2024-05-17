@@ -1,4 +1,4 @@
-import { buttonMapList, buttonPoint } from '../control/control.button.js'
+import { buttonGEOJSON, buttonMapList, buttonPoint } from '../control/control.button.js'
 import { placemarkAdd } from '../placemark/placemark.add.js'
 import { getFeatures } from '../db/features/features.service.js'
 import { useMapList } from '../map-list/useMapList.js'
@@ -11,8 +11,13 @@ export async function mapInit(){
     type: 'yandex#satellite'
   });
 
+  const objectManager = new ymaps.ObjectManager()
+
   const point = buttonPoint(map)
   const mapList = buttonMapList()
+  const geoJSON = buttonGEOJSON(map, objectManager)
+
+  map.controls.add(geoJSON)
   map.controls.add(point)
   map.controls.add(mapList)
 

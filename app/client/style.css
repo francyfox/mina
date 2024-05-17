@@ -122,9 +122,9 @@ input[type="text"] {
 
 .modal {
   top: 50px;
-  left: calc(34% - 320px);
+  left: 13px;
   width: 320px;
-  padding: 40px;
+  padding: 15px;
   position: fixed;
   background: #fff;
   z-index: 10;

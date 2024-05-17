@@ -56,7 +56,7 @@ export const buttonGEOJSON = (map, objectManager) => {
       modal.className = 'modal'
       modal.id = 'geoJson'
       modal.innerHTML = `<form>
-       <input name="upload" type="file" />
+<!--       <input name="upload" type="file" />-->
        <button type="button" name="export">Экспорт</button>
     </form>`
 
@@ -101,29 +101,29 @@ export const buttonGEOJSON = (map, objectManager) => {
         modal.remove()
       })
 
-      modal.querySelector('input[name="upload"]').addEventListener('change', (e) => {
-        const file = e.target.files[0]
-        const reader = new FileReader();
-
-        reader.readAsText(file);
-
-        reader.onload = function() {
-          try {
-            const json = JSON.parse(reader.result)
-            importGEOJSON(json, objectManager, map)
-          } catch (e) {
-            console.error(e)
-            alert('Не удалось импортировать файл')
-          }
-        };
-
-        reader.onerror = function() {
-          console.log(reader.error);
-          alert('Не удалось прочитать файл')
-        };
-
-        modal.remove()
-      })
+      // modal.querySelector('input[name="upload"]').addEventListener('change', (e) => {
+      //   const file = e.target.files[0]
+      //   const reader = new FileReader();
+      //
+      //   reader.readAsText(file);
+      //
+      //   reader.onload = function() {
+      //     try {
+      //       const json = JSON.parse(reader.result)
+      //       importGEOJSON(json, objectManager, map)
+      //     } catch (e) {
+      //       console.error(e)
+      //       alert('Не удалось импортировать файл')
+      //     }
+      //   };
+      //
+      //   reader.onerror = function() {
+      //     console.log(reader.error);
+      //     alert('Не удалось прочитать файл')
+      //   };
+      //
+      //   modal.remove()
+      // })
     }
   })
 
