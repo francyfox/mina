@@ -5,7 +5,7 @@ export const useCapture = (el) => {
 
   for (const item of mapListItems) {
     item.addEventListener('click', (e) => {
-      if (e.ctrlKey) {
+      if (e.shiftKey) {
         const parent = Array.prototype.slice.call(el.children)
         const lastIndex = parent.indexOf(el.querySelector(`[data-id="${window.lastActiveSelectId}"]`))
         const index = parent.indexOf(e.target.closest('.map-list-item'))
