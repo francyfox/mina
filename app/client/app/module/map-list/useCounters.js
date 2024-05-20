@@ -16,7 +16,6 @@ export const useCounters = (geoObjects) => {
     total.count += parseInt(geoObject.properties.get('count') | '0')
     total.square += parseInt(geoObject.properties.get('square') | '0')
 
-    console.log(total)
     setCounters(total)
 
     geoObject.properties.events.add("change", function () {
