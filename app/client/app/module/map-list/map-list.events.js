@@ -54,19 +54,15 @@ export const toggleVisibilityMapItems = async ({ items, geoObjects }) => {
 }
 
 export const onMapListItemCheck = async ({ e, shadow, geoObjects }) => {
-  if (document.querySelector('.map-list-container').classList.contains('capture-mode')) {
-    const checkboxes = shadow.querySelectorAll('.map-list-item.active input[type="checkbox"]')
-    const value = e.target.checked
-    const items = [...checkboxes].map(i => {
-      i.checked = value
-      return {
-        id: i.dataset.id,
-        value
-      }
-    })
+  const checkboxes = shadow.querySelectorAll('.map-list-item.active .checkbox-eye input')
+  const value = e.target.checked
+  const items = [...checkboxes].map(i => {
+    i.checked = value
+    return {
+      id: i.dataset.id,
+      value
+    }
+  })
 
-    await toggleVisibilityMapItems({ items, geoObjects })
-  } else {
-    await toggleVisibilityMapItem({ id: e.target.dataset.id, value: e.target.checked, geoObjects })
-  }
+  await toggleVisibilityMapItems({ items, geoObjects })
 }

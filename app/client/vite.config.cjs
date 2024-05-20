@@ -13,6 +13,7 @@ export default defineConfig({
     minify: true,
   },
   css: {
+    devSourcemap: true,
     transformer: 'lightningcss',
     postcss: {
       plugins: [
