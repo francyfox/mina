@@ -4,7 +4,7 @@ import { getPlacemarkById } from '../../utils.js'
 export const onMapListSearch = ({ search, shadow }) => {
   for (const item of shadow.querySelectorAll('.map-list-item')) {
     const value = search.value.toLowerCase()
-    if (item.querySelector('label').textContent.toLowerCase().includes(value)) {
+    if (item.querySelector('.name').textContent.toLowerCase().includes(value)) {
       item.style.display = ''
     } else {
       item.style.display = 'none'
