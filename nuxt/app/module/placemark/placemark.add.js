@@ -11,9 +11,10 @@ export const togglePointMenu = ({ e, placemark, map }) => {
   if (menu) {
     menu.remove()
   } else {
+    const isAdmin = window.NUXT?.isAdmin ?? true
     const menuContent = document.createElement('div')
     menuContent.id = 'menu'
-    menuContent.innerHTML = menuContentTemplate(urlParams.get('admin'), placemark)
+    menuContent.innerHTML = menuContentTemplate(window.NUXT?.isAdmin, placemark)
 
     document.body.append(menuContent)
 
