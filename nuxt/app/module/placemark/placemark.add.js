@@ -14,14 +14,14 @@ export const togglePointMenu = ({ e, placemark, map }) => {
     const isAdmin = window.NUXT?.isAdmin ?? true
     const menuContent = document.createElement('div')
     menuContent.id = 'menu'
-    menuContent.innerHTML = menuContentTemplate(window.NUXT?.isAdmin, placemark)
+    menuContent.innerHTML = menuContentTemplate(isAdmin, placemark)
 
     document.body.append(menuContent)
 
     document.getElementById('menu').style.left = `${e.get('position')[0]}px`
     document.getElementById('menu').style.top = `${e.get('position')[1]}px`
 
-    if (urlParams.get('admin')) {
+    if (isAdmin) {
       const iconText = document.getElementById('menu').querySelector('input[name="icon_text"]')
       const hintText = document.getElementById('menu').querySelector('input[name="hint_text"]')
       const balloonText = document.getElementById('menu').querySelector('input[name="balloon_text"]')
