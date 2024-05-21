@@ -1,0 +1,42 @@
+<script setup>
+import '@unocss/reset/tailwind-compat.css'
+import 'bulma/css/bulma.min.css'
+import '../assets/style.pcss'
+import '@/marwaMap.js'
+</script>
+
+<template>
+  <div class="map-wrap">
+    <div id="map" style="width: 100%; height: 100vh"></div>
+    <div class="map-list" style="display: none">
+      <div class="map-list-search">
+        <input type="search" placeholder="Поиск">
+      </div>
+      <div class="map-list-actions">
+
+      </div>
+      <div class="map-list-header">
+        <ul class="map-list-header-total">
+          <button id="captureAll" type="button" class="button is-small is-info">Выд. все</button>
+          <li></li>
+          <li id="totalCount"></li>
+          <li id="totalSquare"></li>
+        </ul>
+      </div>
+      <div class="map-list-container capture-mode"></div>
+    </div>
+    <div class="sync">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <g fill="none">
+          <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10zm3.27-11.25H14a.75.75 0 0 0 0 1.5h2.75a.75.75 0 0 0 .75-.75V8.25a.75.75 0 0 0-1.5 0V9a4.991 4.991 0 0 0-4-2c-1.537 0-2.904.66-3.827 1.77a.75.75 0 0 0 1.154.96C9.963 8.963 10.907 8.5 12 8.5c1.492 0 2.767.934 3.27 2.25zm-7.27 5V15a5.013 5.013 0 0 0 7.821.237a.75.75 0 1 0-1.142-.972a3.513 3.513 0 0 1-5.842-.765H10a.75.75 0 0 0 0-1.5H7.25a.75.75 0 0 0-.75.75v3a.75.75 0 0 0 1.5 0z"
+                fill="currentColor"></path>
+        </g>
+      </svg>
+    </div>
+    <slot/>
+  </div>
+</template>
+
+<style scoped>
+
+</style>

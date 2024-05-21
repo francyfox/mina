@@ -1,4 +1,3 @@
-window.lastActiveSelectId = ''
 export const useCapture = (el) => {
   const captureAll = document.getElementById('captureAll')
   const mapListItems = el.querySelectorAll('.map-list-item .checkbox-select input')
