@@ -8,8 +8,9 @@ export const getPlacemarkById = (id, geoObjects) => {
   return ymaps.geoQuery(geoObjects).search(`properties.id = "${id}"`)
 }
 
-export const getPlacemarkUserURL = (coordinates) =>
-  `${BASE_URL}#&ll=${coordinates.join(',')}&z=18`
+export const getPlacemarkUserURL = (maktab) => `${BASE_URL}/maktab/${maktab}/view`
+export const getPlacemarkAdminURL = (maktab) => `${BASE_URL}/maktab/${maktab}/admin`
+
 
 export const getPlacemarkYandexURL = (coordinates) => {
   const url = new URL('https://yandex.ru/maps/')
@@ -22,5 +23,4 @@ export const getPlacemarkYandexURL = (coordinates) => {
 }
 
 
-export const getPlacemarkAdminURL = (coordinates) =>
-  `${BASE_URL}#&admin=true&ll=${coordinates.join(',')}&z=18`
+

@@ -73,8 +73,8 @@ export const togglePointMenu = ({ e, placemark, map }) => {
           preset: color.value,
           maqtab: maqtab.value,
           yandexMapUrl: getPlacemarkYandexURL(placemark.geometry._coordinates),
-          userUrl: getPlacemarkUserURL(placemark.geometry._coordinates),
-          adminUrl: getPlacemarkAdminURL(placemark.geometry._coordinates)
+          userUrl: getPlacemarkUserURL(maqtab.value),
+          adminUrl: getPlacemarkAdminURL(maqtab.value)
         })
 
         window.localStorage.setItem('maqtab', maqtab.value)
@@ -129,8 +129,8 @@ export const placemarkAdd = async (
 
     document.querySelector('.sync').style.visibility = 'visible'
     try {
-      placemark.properties.set('adminUrl',  getPlacemarkAdminURL(placemark.geometry._coordinates))
-      placemark.properties.set('userUrl',  getPlacemarkUserURL(placemark.geometry._coordinates))
+      placemark.properties.set('adminUrl',  getPlacemarkAdminURL(placemark.properties.get('maqtab')))
+      placemark.properties.set('userUrl',  getPlacemarkUserURL(placemark.properties.get('maqtab')))
       placemark.properties.set('yandexMapUrl', getPlacemarkYandexURL(placemark.geometry._coordinates))
       await updateFeature(placemark.properties.get('id'), {
         geometry: {

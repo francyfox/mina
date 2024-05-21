@@ -1,16 +1,13 @@
 import { buttonGEOJSON, buttonMapList, buttonPoint } from '../control/control.button.js'
 import { placemarkAdd } from '../placemark/placemark.add.js'
-import { getFeatures } from '../db/features/features.service.js'
+import { getFeatures, getFeaturesByMaktab } from '../db/features/features.service.js'
 import { useMapList } from '../map-list/useMapList.js'
 import { useCounters } from '@/module/map-list/useCounters.js'
 
 export async function mapInit() {
-  const queryString = window.location.hash;
-  const urlParams = new URLSearchParams(queryString);
-
-  const center = urlParams.get('ll')?.split(',')?.map(i => parseFloat(i)) || [21.42089031185469, 39.89985412245573]
-  const zoom = parseInt(urlParams.get('z')) || 19
-  const isAdmin = urlParams.get('admin')
+  const center = [21.42089031185469, 39.89985412245573]
+  const zoom = 19
+  const isAdmin = window.NUXT?.isAdmin ?? true
 
   const map = new ymaps.Map('map', {
     center,
@@ -32,7 +29,15 @@ export async function mapInit() {
   }
 
   try {
-    const features = await getFeatures()
+    const features = (window.NUXT)
+      ? await getFeaturesByMaktab(window.NUXT.params.name)
+      : await getFeatures()
+
+    const firstPointCoordinates = features[0]?.geometry?.coordinates
+
+    if (firstPointCoordinates) {
+      map.setCenter(firstPointCoordinates)
+    }
 
     for (const feature of features) {
       await placemarkAdd({
@@ -52,17 +57,6 @@ export async function mapInit() {
     if (isAdmin) {
       document.querySelector('.map-list').style.display = 'flex'
     }
-
-    map.events.add('boundschange', function (e) {
-      const queryString = window.location.hash;
-      const urlParams = new URLSearchParams(queryString);
-      const isAdmin = urlParams.get('admin')
-
-      const centerURL = e.get('newCenter')
-      const zoomURL = e.get('newZoom')
-
-      window.location.hash = `${isAdmin ? '&admin=true' : ''}&ll=${centerURL.toString()}&z=${zoomURL.toString()}`
-    })
   } catch (e) {
     alert('Не удалось загрузить из БД')
     console.error(e)

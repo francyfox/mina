@@ -11,6 +11,19 @@ export const getFeatures = async () => {
 
   return features
 }
+
+export const getFeaturesByMaktab = async (maqtab) => {
+  const features = []
+  const q = query(featuresRef, where('properties.maqtab', '==', maqtab))
+  const querySnapshot = await getDocs(q)
+
+
+  querySnapshot.forEach((doc) => {
+    features.push(doc.data())
+  })
+
+  return features
+}
 export const addFeature = async (data) =>
   await addDoc(featuresRef, data)
 

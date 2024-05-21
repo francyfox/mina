@@ -1,5 +1,5 @@
 [build]
-    base='/'
+    base='/nuxt'
     publish='dist'
     command='pnpm run build'
     environment = { NODE_VERSION = "18.0.0" }
