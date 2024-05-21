@@ -78,6 +78,9 @@ export const useMapList = (data, geoObjects) => {
       const color = transformPresetToColor(geoObject.options.get('preset'))
       const el = shadow.querySelector(`[data-id="${id}"]`)
       el.querySelector('.color').style.background = color
+      el.querySelector('.name').textContent = geoObject.properties.get('iconContent')
+      el.querySelector('.count').textContent = geoObject.properties.get('count')
+      el.querySelector('.square').textContent = geoObject.properties.get('square')
     })
   })
 
