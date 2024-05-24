@@ -1,6 +1,21 @@
-# Nuxt 3 Minimal Starter
+# Mina
+### nuxt3 + yamaps + vanilajs + firebase
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Полезное
+
+Production: https://test-marwa.netlify.app/
+
+FireBase: https://console.firebase.google.com/project/mina-gorodok
+
+Docs (для персонала): http://31.129.98.75/books/bisat
+
+[Doc Api mina](https://golota.notion.site/Api-marwa-32ade4aee8f14f54b67de5accee178d7?pvs=4)
+
+## О проекте
+
+Данный проект был портирован из Vite с vanila js, большенство компонентов могут быть не 
+адаптированы на Vue. Приношу глубачайшие извинения и выражаю соболезнование если приступили к 
+данному проекту.
 
 ## Setup
 
