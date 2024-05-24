@@ -129,10 +129,11 @@ export const placemarkAdd = async (
   showPopup = false,
   addToDb = false
 ) => {
+  const isAdmin = window.NUXT?.isAdmin ?? true
   const placemark = new ymaps.Placemark(coords, description, {
     preset,
     visible,
-    draggable: true
+    draggable: isAdmin
   })
 
   window.localStorage.setItem('iconContent', description.iconContent)

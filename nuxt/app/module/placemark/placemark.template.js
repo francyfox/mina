@@ -10,10 +10,18 @@ export const menuContentTemplate = (isAdmin, placemark) => {
 
 export const menuContentInfo = (placemark) => {
   return `
-  <li>Номер палатки: ${placemark.properties.get('iconContent')}</li>
+   <div class="is-flex is-gap-0.5">
+      <li>Номер: ${placemark.properties.get('iconContent')}</li>
+      <li class="bg-green">Зеленая: ${placemark.properties.get('green')}</li>
+      <li class="bg-red">Красная: ${placemark.properties.get('red')}</li>
+   </div>
+
   <li>Описание: ${placemark.properties.get('balloonContent')}</li>
-  <li>Кв. м: ${placemark.properties.get('square')}</li>
-  <li>Кол-во: ${placemark.properties.get('count')}</li>
+   <div class="is-flex is-gap-0.5">
+     <li>Кв. м: ${placemark.properties.get('square')}</li>
+     <li>Кол-во: ${placemark.properties.get('count')}</li>
+     <li>Мактаб: ${placemark.properties.get('maqtab')}</li>
+   </div>
   `
 }
 
@@ -23,8 +31,8 @@ export const editButtons = `<button class="button is-small is-danger" name="remo
 export const menuContentEditTemplate = `
                       <div class="is-flex is-gap-0.5">
                         <li>Номер: <br /> <input class="input" type="text" name="icon_text" maxlength="5" /></li>
-                        <li>Зеленая: <br /> <input class="input is-success" type="text" name="green_text" maxlength="5" /></li>
-                        <li>Красная: <br /> <input class="input is-danger" type="text" name="red_text" maxlength="5" /></li>
+                        <li>Зеленая: <br /> <input class="input is-success bg-green" type="text" name="green_text" maxlength="5" /></li>
+                        <li>Красная: <br /> <input class="input is-danger bg-red" type="text" name="red_text" maxlength="5" /></li>
                       </div>
                       <li>Подсказка: <br /> <input class="input" type="text" name="hint_text" maxlength="20" /></li>
                       <li>Описание: <br /> <input class="input" type="text" name="balloon_text" maxlength="50" /></li>
