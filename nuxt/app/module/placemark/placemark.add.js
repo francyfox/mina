@@ -1,7 +1,7 @@
 import { addFeature, removeFeature, updateFeature } from '../db/features/features.service.js'
 import { nanoid } from 'nanoid'
 import { menuContentTemplate } from '@/module/placemark/placemark.template.js'
-import { getPlacemarkAdminURL, getPlacemarkUserURL, getPlacemarkYandexURL } from '@/utils.js'
+import { getPlacemarkAdminURL, getPlacemarkUserURL, getPlacemarkYandexURL, incrementTentNo } from '@/utils.js'
 
 export const togglePointMenu = ({ e, placemark, map }) => {
   const queryString = window.location.hash
@@ -23,6 +23,8 @@ export const togglePointMenu = ({ e, placemark, map }) => {
 
     if (isAdmin) {
       const iconText = document.getElementById('menu').querySelector('input[name="icon_text"]')
+      const redText = document.getElementById('menu').querySelector('input[name="red_text"]')
+      const greenText = document.getElementById('menu').querySelector('input[name="green_text"]')
       const hintText = document.getElementById('menu').querySelector('input[name="hint_text"]')
       const balloonText = document.getElementById('menu').querySelector('input[name="balloon_text"]')
       const color = document.getElementById('menu').querySelector('select[name="color"]')
@@ -31,13 +33,14 @@ export const togglePointMenu = ({ e, placemark, map }) => {
       const maqtab = document.getElementById('menu').querySelector('input[name="maqtab_text"]')
 
       iconText.value = placemark.properties.get('iconContent')
+      redText.value = placemark.properties.get('red')
+      greenText.value = placemark.properties.get('green')
       hintText.value = placemark.properties.get('hintContent')
       balloonText.value = placemark.properties.get('balloonContent')
       color.value = placemark.options.get('preset')
       square.value = placemark.properties.get('square')
       count.value = placemark.properties.get('count')
       maqtab.value = placemark.properties.get('maqtab')
-
 
       document.querySelector('button[name="share"]').addEventListener('click', () => {
         const link = document.createElement('a')
@@ -67,6 +70,8 @@ export const togglePointMenu = ({ e, placemark, map }) => {
       document.getElementById('menu').querySelector('button[type="submit"]').addEventListener('click', async () => {
         placemark.properties.set({
           iconContent: iconText.value,
+          red: redText.value,
+          green: greenText.value,
           hintContent: hintText.value,
           balloonContent: balloonText.value,
           square: square.value,
@@ -78,6 +83,9 @@ export const togglePointMenu = ({ e, placemark, map }) => {
           adminUrl: getPlacemarkAdminURL(maqtab.value)
         })
 
+        window.localStorage.setItem('iconContent', iconText.value)
+        window.localStorage.setItem('red', redText.value)
+        window.localStorage.setItem('green', greenText.value)
         window.localStorage.setItem('maqtab', maqtab.value)
 
         placemark.options.set({
@@ -108,10 +116,12 @@ export const placemarkAdd = async (
     coords,
     description = {
       id: nanoid(),
-      iconContent: 'текст',
+      iconContent: incrementTentNo(window.localStorage.getItem('iconContent')) || '1',
       hintContent: '',
       balloonContent: '',
       maqtab: window.localStorage.getItem('maqtab') || '',
+      red: window.localStorage.getItem('red') || '',
+      green: window.localStorage.getItem('green') || '',
     },
     preset = 'islands#darkOrangeStretchyIcon',
     visible = true
@@ -125,6 +135,7 @@ export const placemarkAdd = async (
     draggable: true
   })
 
+  window.localStorage.setItem('iconContent', description.iconContent)
   placemark.events.add('contextmenu', (e) => togglePointMenu({ e, placemark, map }))
   placemark.events.add('dragend', async (e) => {
 

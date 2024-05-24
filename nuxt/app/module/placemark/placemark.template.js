@@ -20,12 +20,19 @@ export const menuContentInfo = (placemark) => {
 export const editButtons = `<button class="button is-small is-danger" name="remove" type="button" >Удалить</button>
                <button class="button is-small is-success" type="submit" >Сохранить</button>`
 
-export const menuContentEditTemplate = `<li>Номер палатки: <br /> <input class="input" type="text" name="icon_text" maxlength="5" /></li>
+export const menuContentEditTemplate = `
+                      <div class="is-flex is-gap-0.5">
+                        <li>Номер: <br /> <input class="input" type="text" name="icon_text" maxlength="5" /></li>
+                        <li>Зеленая: <br /> <input class="input is-success" type="text" name="green_text" maxlength="5" /></li>
+                        <li>Красная: <br /> <input class="input is-danger" type="text" name="red_text" maxlength="5" /></li>
+                      </div>
                       <li>Подсказка: <br /> <input class="input" type="text" name="hint_text" maxlength="20" /></li>
                       <li>Описание: <br /> <input class="input" type="text" name="balloon_text" maxlength="50" /></li>
-                      <li>Кв. м: <br /> <input class="input" type="number" name="square_number" max="999" /></li>
-                      <li>Кол-во: <br /> <input class="input" type="number" name="count_number" max="999" /></li>
-                      <li>Мактаб: <br /> <input class="input" type="text" name="maqtab_text" maxlength="20" /></li>
+                      <div class="is-flex is-gap-0.5">
+                        <li>Кв. м: <br /> <input class="input" type="number" name="square_number" max="999" /></li>
+                        <li>Кол-во: <br /> <input class="input" type="number" name="count_number" max="999" /></li>
+                        <li>Мактаб: <br /> <input class="input" type="text" name="maqtab_text" maxlength="20" /></li>
+                      </div>
                       <li>Цвет: <br />
                       <span class="select">
                         <select name="color">

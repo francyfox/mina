@@ -22,5 +22,22 @@ export const getPlacemarkYandexURL = (coordinates) => {
   return url.toString()
 }
 
+export const incrementTentNo = (i) => {
+  if (i) {
+    if (!/-(.*)/.test(i)) {
+      const number = Number(i)
+      return number + 1
+    } else {
+      const match = i.split('-')
+      const last = match.pop()
+      console.log((Number(last) + 1).toString())
+      match.push((Number(last) + 1).toString())
+      return match.join('-')
+    }
+  } else {
+    return null
+  }
+}
+
 
 
