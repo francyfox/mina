@@ -29,6 +29,9 @@ export const editButtons = `<button class="button is-small is-danger" name="remo
                <button class="button is-small is-success" type="submit" >Сохранить</button>`
 
 export const menuContentEditTemplate = `
+                      <div class="columns is-gap-0.5 mb-0">
+                        <li class="column is-half">1с_ID: <br /> <input class="input" type="text" name="1с_ID" maxlength="4" /></li>
+                      </div>
                       <div class="is-flex is-gap-0.5">
                         <li>Номер: <br /> <input class="input" type="text" name="icon_text" maxlength="5" /></li>
                         <li>Зеленая: <br /> <input class="input is-success bg-green" type="text" name="green_text" maxlength="5" /></li>

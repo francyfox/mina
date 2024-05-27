@@ -22,6 +22,7 @@ export const togglePointMenu = ({ e, placemark, map }) => {
     document.getElementById('menu').style.top = `${e.get('position')[1]}px`
 
     if (isAdmin) {
+      const OneCID = document.getElementById('menu').querySelector('input[name="1с_ID"]')
       const iconText = document.getElementById('menu').querySelector('input[name="icon_text"]')
       const redText = document.getElementById('menu').querySelector('input[name="red_text"]')
       const greenText = document.getElementById('menu').querySelector('input[name="green_text"]')
@@ -32,6 +33,7 @@ export const togglePointMenu = ({ e, placemark, map }) => {
       const count = document.getElementById('menu').querySelector('input[name="count_number"]')
       const maqtab = document.getElementById('menu').querySelector('input[name="maqtab_text"]')
 
+      OneCID.value = placemark.properties.get('1c_ID')
       iconText.value = placemark.properties.get('iconContent')
       redText.value = placemark.properties.get('red')
       greenText.value = placemark.properties.get('green')
@@ -69,6 +71,7 @@ export const togglePointMenu = ({ e, placemark, map }) => {
 
       document.getElementById('menu').querySelector('button[type="submit"]').addEventListener('click', async () => {
         placemark.properties.set({
+          '1c_ID': OneCID.value,
           iconContent: iconText.value,
           red: redText.value,
           green: greenText.value,
@@ -116,6 +119,7 @@ export const placemarkAdd = async (
     coords,
     description = {
       id: nanoid(),
+      '1c_ID': '',
       iconContent: incrementTentNo(window.localStorage.getItem('iconContent')) || '1',
       hintContent: '',
       balloonContent: '',
