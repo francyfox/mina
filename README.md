@@ -7,7 +7,8 @@ Mina (Arabic: مِنَى, romanized: Minā), also known as Muna (Arabic: مُن�
 
 ## Project
 
-Its app for staff of Mina city
+Its app for staff of Mina city. Create placemark for tents with description.
+Connected to Firebase database
 
 App with few endpoints:
 
